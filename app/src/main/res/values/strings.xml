@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">KITAPP</string>
+    <string name="home">Home</string>
+    <string name="messages">Messages</string>
+    <string name="profile">Profile</string>
+    <string name="newNotice">Add New Notice</string>
+    <string name="star">Rate the App</string>
+    <string name="logout">Log Out</string>
+    <string name="cart">Shoppings</string>
+    <string name="others">Others</string>
+    <string name="hello">Hello \n %1$s</string>
+    <string name="emailhint">Type Your E-mail</string>
+    <string name="passwordhint">Type Your Password</string>
+    <string name="loginButton">Log In</string>
+    <string name="loginFail">Log In Failed</string>
+    <string name="loginRegisterTextView">Register</string>
+    <string name="registerFail">Registeration Failed</string>
+    <string name="noticeUploaded">Notice Uploaded</string>
+    <string name="registerSuccess">Registeration Successful</string>
+    <string name="registerError">Please Fill All Necessary Fields</string>
+    <string name="forgotPasswordButton">Reset My Password</string>
+    <string name="forgotPasswordMailSent">A link is sent to your email to reset your password</string>
+    <string name="loginForgotPasswordTextView">Forgot My Password</string>
+    <string name="bookName">Book Name</string>
+    <string name="bookPrice">Book Price</string>
+    <string name="addNotice">Add Notice</string>
+    <string name="updateUserName">Enter New User Name to Change</string>
+    <string name="update">Update</string>
+    <string name="updated">User Name Updated. Log In Again to See Updated User Name</string>
+    <string name="notices">Notices</string>
+    <string name="terms">I Accept All The Terms And Conditions</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="forum_search_topic" >Type topic to be searched</string>
+    <string name="forum_add_topic" >Type topic to be added</string>
+    <string name="topicadded" >Topic added</string>
+    <string name="noticeBookDetails" >Type Details About Book</string>
+    <string name="success" >Success</string>
+    <string name="fail" >Fail</string>
+</resources>

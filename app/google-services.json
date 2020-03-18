@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "562717129137",
+    "firebase_url": "https://kitapp-47b47.firebaseio.com",
+    "project_id": "kitapp-47b47",
+    "storage_bucket": "kitapp-47b47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562717129137:android:6b81c567be82c7539b2590",
+        "android_client_info": {
+          "package_name": "com.armagansadikoglu.kitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562717129137-50u1ec51q26mph0vpt0ef5mv2omubbjq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armagansadikoglu.kitapp",
+            "certificate_hash": "cfdd46c19a8a735b1b2ce7283f14828886743c9f"
+          }
+        },
+        {
+          "client_id": "562717129137-jth5dp0jnqup4bsesj08e2cvh2u4129q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armagansadikoglu.kitapp",
+            "certificate_hash": "07c728f57cf1c502721ce51ef6e2df516fdc5319"
+          }
+        },
+        {
+          "client_id": "562717129137-gecqaqpd9ms04vumve9o6kdi7pmo4nqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEgGbKtoRK9qgBf38wck5Gh-MX8ks0UWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562717129137-gecqaqpd9ms04vumve9o6kdi7pmo4nqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

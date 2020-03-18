@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KITAPP</string>
+    <string name="home">Ana Menü</string>
+    <string name="logout">Çıkış</string>
+    <string name="messages">Mesajlar</string>
+    <string name="profile">Profil</string>
+    <string name="star">Uygulamayı Değerlendir</string>
+    <string name="cart">Alışverişler</string>
+    <string name="others">Diğerleri</string>
+    <string name="hello">Hoşgeldin \\n %1$s</string>
+    <string name="emailhint">E-mail Adresinizi Giriniz</string>
+    <string name="passwordhint">Şifrenizi Giriniz</string>
+    <string name="loginButton">Giriş Yap</string>
+    <string name="loginForgotPasswordTextView">Parolamı Unuttum</string>
+    <string name="loginRegisterTextView">Üye Ol</string>
+    <string name="terms">Tüm Şartları ve Durumları Kabul Ediyorum</string>
+    <string name="registerError">Lütfen Tüm Alanları Doldurun</string>
+    <string name="forgotPasswordButton">Şifremi Sıfırla</string>
+    <string name="registerFail">Kayıt İşlemi Başarısız</string>
+    <string name="registerSuccess">Kayıt İşlemi Başarılı</string>
+    <string name="loginFail">Giriş Başarısız</string>
+    <string name="forgotPasswordMailSent">Şifre sıfırlama bağlantısı mail adresinize gönderildi</string>
+    <string name="newNotice">Yeni İlan Ekle</string>
+    <string name="addNotice">İlanı Ekle</string>
+    <string name="bookName">Kitap Adı</string>
+    <string name="bookPrice">Kitap Fiyatı</string>
+    <string name="noticeUploaded">İlan Yüklendi</string>
+    <string name="updateUserName">Değiştirmek İçin Yeni Kullanıcı Adı Girin</string>
+    <string name="update">Güncelle</string>
+    <string name="notices">İlanlar</string>
+    <string name="updated">Kullanıcı Adı Güncellendi. Yeni Kullanıcı Adınızı Görmek İçin Yeniden Giriş Yapın</string>
+    <string name="forum_search_topic">Aranacak konuyu yazınız</string>
+    <string name="forum_add_topic">Eklenecek konuyu yazınız</string>
+    <string name="topicadded">Konu eklendi</string>
+    <string name="noticeBookDetails">Kitap Hakkında Detayları Giriniz</string>
+    <string name="success">İşlem Başarılı</string>
+    <string name="fail">İşlem Başarısız</string>
+</resources>
