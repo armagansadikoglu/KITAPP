@@ -36,4 +36,5 @@
     <string name="noticeBookDetails">Kitap Hakkında Detayları Giriniz</string>
     <string name="success">İşlem Başarılı</string>
     <string name="fail">İşlem Başarısız</string>
+    <string name="typehere">Buraya Yazını</string>
 </resources>

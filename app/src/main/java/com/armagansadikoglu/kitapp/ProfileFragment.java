@@ -149,9 +149,9 @@ public class ProfileFragment extends Fragment {
                 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                String newUserName = editTextUserDisplayNameProfile.getText().toString();
+                final String newUserName = editTextUserDisplayNameProfile.getText().toString();
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                         .setDisplayName(newUserName)
@@ -166,6 +166,10 @@ public class ProfileFragment extends Fragment {
                                     progressBarProfile.setVisibility(View.INVISIBLE);
                                     //Tıklamayı geri verme
                                     getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    // Databasedeki username'i de güncelledik
+                                    DatabaseReference usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+                                    usersDatabaseReference.child(user.getUid()).child("userDisplayName").setValue(newUserName);
+
                                     Toast.makeText(getContext(), R.string.updated, Toast.LENGTH_SHORT).show();
                                 }
                             }

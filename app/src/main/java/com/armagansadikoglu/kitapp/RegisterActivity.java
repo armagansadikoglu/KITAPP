@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -27,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText registerEmailEditText;
     EditText registerPasswordEditText;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    DatabaseReference usersDatabaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,9 @@ public class RegisterActivity extends AppCompatActivity {
         registerCheckBox = findViewById(R.id.registerCheckBox);
         registerEmailEditText = findViewById(R.id.registerEmailEditText);
         registerPasswordEditText = findViewById(R.id.registerPasswordEditText);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        usersDatabaseReference = mDatabase.child("users");
 
     }
 
@@ -71,6 +78,16 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this,R.string.registerSuccess, Toast.LENGTH_SHORT).show();
                         //Tıklamayı geri verme
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                        // kullanıcıyı database'e de kaydetme(messages kısmı için gerekti)
+                        String displayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                        if (displayName == null){
+                            displayName = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                        }
+                        User user = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(),displayName);
+
+
+                        usersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
                     }
                     else{
                         Toast.makeText(RegisterActivity.this, R.string.registerFail, Toast.LENGTH_SHORT).show();
