@@ -4,9 +4,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,9 +65,33 @@ public class HomeFragment extends Fragment {
         // TIKLANAN İTEME YAPILACAKLAR
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
-                //Toast.makeText(getContext(), lstNotice.get(position).getBookName(), Toast.LENGTH_SHORT).show();
+            public void onItemClick(final int position) {
+
+                // Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getContext(),myrcyclerview);
+                // Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                // Registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener( new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // popup'a tıklanınca yapılacak
+                        Fragment fg = new ChatFragment();
+                        // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
+                        Bundle bundle=new Bundle();
+                        bundle.putString("userName", notices.get(position).getSeller());
+                        bundle.putString("userID",notices.get(position).getUserID());
+                        fg.setArguments(bundle);
+                        // adding fragment to relative layout by using layout id
+                        getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                        Toast.makeText(getContext(), notices.get(position).getSeller(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
                 Toast.makeText(getContext(), notices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
+                popup.show();// Showing popup menu
+
+
+
                 // layoutu güncelleme
                 recyclerViewAdapter.notifyItemChanged(position);
             }

@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/messagesUsernameTextView"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:background="@color/colorAccent"
         android:gravity="center"
         android:text="TextView"

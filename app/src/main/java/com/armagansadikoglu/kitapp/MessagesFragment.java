@@ -49,11 +49,11 @@ public class MessagesFragment extends Fragment {
             public void onItemClick(int position) {
                 Toast.makeText(getContext(), users.get(position).getUserDisplayName(), Toast.LENGTH_SHORT).show();
 
-                //TIKLANINCA MESAJLARIN OLDUĞU FRAGMENT GELSİN
+                //TIKLANINCA MESAJLARIN OLDUĞU CHAT FRAGMENT GELSİN
 
-                // Buradaki kısım değişecek deneme amaçlı
+
                 Fragment fg = new ChatFragment();
-                // Fragmentlar arası bilgi alışverişi için bundle kullanımı
+                // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
                 Bundle bundle=new Bundle();
                 bundle.putString("userName", users.get(position).getUserDisplayName());
                 bundle.putString("userID",users.get(position).getUserID());

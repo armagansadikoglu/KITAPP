@@ -38,4 +38,5 @@
     <string name="success" >Success</string>
     <string name="fail" >Fail</string>
     <string name="typehere">Type Here</string>
+    <string name="sendmessage">Send Message</string>
 </resources>

@@ -37,4 +37,5 @@
     <string name="success">İşlem Başarılı</string>
     <string name="fail">İşlem Başarısız</string>
     <string name="typehere">Buraya Yazını</string>
+    <string name="sendmessage">Mesaj Gönder</string>
 </resources>
