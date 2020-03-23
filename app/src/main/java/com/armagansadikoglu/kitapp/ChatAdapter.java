@@ -62,7 +62,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
 
         holder.chatMessageDateTextView.setText(mData.get(position).getDate());
         holder.chatMessageTextView.setText(mData.get(position).getMessage());
-        //BURASI HATA VERDİRİYOR
+        //BURASI ARTIK HATA VERMİYOR 
+        /*
+        * Olması gereken :
+        * chatUserNameTextView = itemView.findViewById(R.id.chatUserNameTextView);
+        * Hata verdiren :
+        *
+        * chatUserNameTextView = itemView.findViewById(R.id.messageUserNameTextView);
+        * Bir önceki fragmenttaki textview'a erişmeye çalışılmış. Hata çözüldü.
+        *
+        * */
         holder.chatUserNameTextView.setText(mData.get(position).getSenderName());
 
 
@@ -106,7 +115,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
-            chatUserNameTextView = itemView.findViewById(R.id.messagesUserProfile);
+            chatUserNameTextView = itemView.findViewById(R.id.chatUserNameTextView);
             chatMessageTextView = itemView.findViewById(R.id.chatMessageTextView);
             chatMessageDateTextView = itemView.findViewById(R.id.chatMessageDateTextView);
             chatUserProfile = itemView.findViewById(R.id.chatUserProfile);
