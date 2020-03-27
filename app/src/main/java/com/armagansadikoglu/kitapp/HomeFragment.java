@@ -1,47 +1,38 @@
 package com.armagansadikoglu.kitapp;
 
-import android.net.Uri;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
+
 
 
 public class HomeFragment extends Fragment {
 
     View v;
     private RecyclerView myrcyclerview;
-    //private List<Notice> lstNotice;
     private RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<Notice> notices = new ArrayList<>();
 
@@ -62,7 +53,7 @@ public class HomeFragment extends Fragment {
 
 
 
-        // TIKLANAN İTEME YAPILACAKLAR
+        // TIKLANAN İLANA YAPILACAKLAR
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
@@ -74,16 +65,54 @@ public class HomeFragment extends Fragment {
                 // Registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener( new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        // popup'a tıklanınca yapılacak
-                        Fragment fg = new ChatFragment();
-                        // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
-                        Bundle bundle=new Bundle();
-                        bundle.putString("userName", notices.get(position).getSeller());
-                        bundle.putString("userID",notices.get(position).getUserID());
-                        fg.setArguments(bundle);
-                        // adding fragment to relative layout by using layout id
-                        getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
-                        Toast.makeText(getContext(), notices.get(position).getSeller(), Toast.LENGTH_SHORT).show();
+
+                            // popup'a tıklanınca yapılacak
+                            Fragment fg = new ChatFragment();
+                            // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
+                            final Bundle bundle=new Bundle();
+
+                        // Menüye yeni item eklenirse diye ifle kontrol ettirdim
+                        if (item.getItemId() == R.id.popupmenusendmessage){
+                            final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            final DatabaseReference databaseReference = database.getReference().child("users").child(currentUser.getUid()).child("messages");
+                            //final ArrayList<Chat> chats = new ArrayList<>();
+
+                            /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    // chats.clear();
+                                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                                    for (DataSnapshot child:children) {
+                                        Chat chat = child.getValue(Chat.class);
+                                        // Daha önceden chat oluşmuş mu ? kontrolü
+                                        if (child.getKey().equals(notices.get(position).getUserID())){
+                                            bundle.putString("receiverID",notices.get(position).getUserID());
+                                        }else{
+                                            String id = database.getReference().push().getKey();
+                                            databaseReference.child(id);
+                                            bundle.putString("receiverID",id);
+                                        }
+                                        //chats.add(chat);
+                                    }
+                                    // Verileri sürekli getirmesi için
+                                    recyclerViewAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });*/
+
+                            bundle.putString("receiverName", notices.get(position).getSeller());
+                            bundle.putString("receiverID",notices.get(position).getUserID());
+                            fg.setArguments(bundle);
+                            // adding fragment to relative layout by using layout id
+                            getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                            Toast.makeText(getContext(), notices.get(position).getSeller(), Toast.LENGTH_SHORT).show();
+
+                        }
                         return true;
                     }
                 });

@@ -29,7 +29,7 @@ public class ChatFragment extends Fragment {
     ChatAdapter chatAdapter;
     EditText chatEditText;
     Button chatSendButton;
-    String userName,userID;
+    String receiverName,receiverID;
     View view;
 
     String chatKey;
@@ -76,10 +76,10 @@ public class ChatFragment extends Fragment {
                     //String displayName;
 
 
-                    Chat chat = new Chat(chatKey,FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName,userID,userName,chatEditText.getText().toString(),"10.10.2010");
+                    Chat chat = new Chat(chatKey,FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName,receiverID,receiverName,chatEditText.getText().toString(),"10.10.2010");
 
-                    mDatabase.child("chat").child(chatKey).setValue(chat);
-
+                    mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID).child(chatKey).setValue(chat);
+                    
                     Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();}
             }
         });
@@ -93,35 +93,38 @@ public class ChatFragment extends Fragment {
 
 
         // MessagesFragment'dan gelen bilgileri aldık
-        userName= getArguments().getString("userName");
-        userID = getArguments().getString("userID");
+        receiverName= getArguments().getString("receiverName");
+        receiverID = getArguments().getString("receiverID");
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        chatsDatabaseReference = mDatabase.child("chat");
+            chatsDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID);
 
-        // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
-        chatsDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chats.clear();
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    Chat value = child.getValue(Chat.class);
-                    chats.add(value);
+            // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
+            chatsDatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    chats.clear();
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                    for (DataSnapshot child : children) {
+                        Chat value = child.getValue(Chat.class);
+                        chats.add(value);
+                    }
+                    // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME
+                    Collections.reverse(chats);
+
+                    // Verileri sürekli getirmesi için
+                    chatAdapter.notifyDataSetChanged();
                 }
-                // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME
-                Collections.reverse(chats);
 
-                // Verileri sürekli getirmesi için
-                chatAdapter.notifyDataSetChanged();
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
 
-            }
-        });
+
 
 
 
