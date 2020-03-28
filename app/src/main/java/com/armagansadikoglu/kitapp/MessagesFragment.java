@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,8 +28,8 @@ public class MessagesFragment extends Fragment {
     View view;
 
     RecyclerView messagesUsersRecylerView;
-    MessagesAdapter messagesAdapter;
-    ArrayList<User> users = new ArrayList<>();
+    ChatAdapter messagesAdapter;
+    ArrayList<Chat> users = new ArrayList<>();
 
     private DatabaseReference mDatabase;
     DatabaseReference usersDatabaseReference;
@@ -37,17 +38,17 @@ public class MessagesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        view =  inflater.inflate(R.layout.fragment_messages,container,false);
        messagesUsersRecylerView = view.findViewById(R.id.messagesUsersRecylerView);
-        messagesAdapter = new MessagesAdapter(getContext(),users);
+        messagesAdapter = new ChatAdapter(getContext(),users);
         // Tek satırda 1 adet ürün sergilemek için
         messagesUsersRecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
        messagesUsersRecylerView.setAdapter(messagesAdapter);
 
         // TIKLANAN USER'A YAPILACAKLAR
-        messagesAdapter.setOnItemClickListener(new MessagesAdapter.OnItemClickListener(){
+        messagesAdapter.setOnItemClickListener(new ChatAdapter.OnItemClickListener(){
 
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(getContext(), users.get(position).getUserDisplayName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), users.get(position).getReceiverName(), Toast.LENGTH_SHORT).show();
 
                 //TIKLANINCA MESAJLARIN OLDUĞU CHAT FRAGMENT GELSİN
 
@@ -55,8 +56,8 @@ public class MessagesFragment extends Fragment {
                 Fragment fg = new ChatFragment();
                 // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
                 Bundle bundle=new Bundle();
-                bundle.putString("userName", users.get(position).getUserDisplayName());
-                bundle.putString("userID",users.get(position).getUserID());
+                bundle.putString("receiverName", users.get(position).getReceiverName());
+                bundle.putString("receiverID",users.get(position).getReceiverID());
                 fg.setArguments(bundle);
                 // adding fragment to relative layout by using layout id
                 getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
@@ -82,7 +83,7 @@ public class MessagesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        usersDatabaseReference = mDatabase.child("users");
+        usersDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages");
 
         // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
         usersDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -91,7 +92,7 @@ public class MessagesFragment extends Fragment {
                 users.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
-                    User value = child.getValue(User.class);
+                    Chat value = child.getValue(Chat.class);
                     users.add(value);
                 }
                 // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME

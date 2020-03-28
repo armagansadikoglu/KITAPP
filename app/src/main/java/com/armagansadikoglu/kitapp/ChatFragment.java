@@ -79,7 +79,12 @@ public class ChatFragment extends Fragment {
                     Chat chat = new Chat(chatKey,FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName,receiverID,receiverName,chatEditText.getText().toString(),"10.10.2010");
 
                     mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID).child(chatKey).setValue(chat);
-                    
+
+                    // mesajı attığımız kişiye de mesajı eklememiz lazım
+
+                    mDatabase.child("users").child(receiverID).child("messages").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(chatKey).setValue(chat);
+
+
                     Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();}
             }
         });
@@ -111,8 +116,8 @@ public class ChatFragment extends Fragment {
                         Chat value = child.getValue(Chat.class);
                         chats.add(value);
                     }
-                    // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME
-                    Collections.reverse(chats);
+                    // Mesajlaşmada reverse etmeye gerek yok. Eski mesaj yukarıda kalsın
+                   // Collections.reverse(chats);
 
                     // Verileri sürekli getirmesi için
                     chatAdapter.notifyDataSetChanged();
@@ -123,6 +128,7 @@ public class ChatFragment extends Fragment {
 
                 }
             });
+
 
 
 
