@@ -38,12 +38,15 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
 
     Context mContext;
-    List<User> mData;
+
+    List<String> Names;
+    List<String> IDS;
     Uri profilePicture;
 
-    public MessagesAdapter(Context mContext, List<User> mData) {
+    public MessagesAdapter(Context mContext, List<String> IDS,  List<String> Names ) {
         this.mContext = mContext;
-        this.mData = mData;
+        this.IDS = IDS;
+        this.Names = Names;
     }
 
     @NonNull
@@ -60,11 +63,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
-        holder.messagesUsernameTextView.setText(mData.get(position).getUserDisplayName());
+        holder.messagesUsernameTextView.setText(Names.get(position));
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference profileImagesRef = storageRef.child(mData.get(position).getUserID());
+        StorageReference profileImagesRef = storageRef.child(IDS.get(position));
 
         profileImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -88,7 +91,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return Names.size();
     }
     // interface buradan devam
     public static class MyViewHolder extends RecyclerView.ViewHolder{

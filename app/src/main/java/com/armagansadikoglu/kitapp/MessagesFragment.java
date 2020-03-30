@@ -28,27 +28,31 @@ public class MessagesFragment extends Fragment {
     View view;
 
     RecyclerView messagesUsersRecylerView;
-    ChatAdapter messagesAdapter;
-    ArrayList<Chat> users = new ArrayList<>();
+    MessagesAdapter messagesAdapter;
+
+
+    ArrayList<String> userIDs = new ArrayList<>();
+    ArrayList<String> userNames = new ArrayList<>();
 
     private DatabaseReference mDatabase;
     DatabaseReference usersDatabaseReference;
+    DatabaseReference namesDatabaseReference;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        view =  inflater.inflate(R.layout.fragment_messages,container,false);
        messagesUsersRecylerView = view.findViewById(R.id.messagesUsersRecylerView);
-        messagesAdapter = new ChatAdapter(getContext(),users);
+        messagesAdapter = new MessagesAdapter(getContext(),userIDs,userNames);
         // Tek satırda 1 adet ürün sergilemek için
         messagesUsersRecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
        messagesUsersRecylerView.setAdapter(messagesAdapter);
 
         // TIKLANAN USER'A YAPILACAKLAR
-        messagesAdapter.setOnItemClickListener(new ChatAdapter.OnItemClickListener(){
+        messagesAdapter.setOnItemClickListener(new MessagesAdapter.OnItemClickListener(){
 
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(getContext(), users.get(position).getReceiverName(), Toast.LENGTH_SHORT).show();
+
 
                 //TIKLANINCA MESAJLARIN OLDUĞU CHAT FRAGMENT GELSİN
 
@@ -56,8 +60,8 @@ public class MessagesFragment extends Fragment {
                 Fragment fg = new ChatFragment();
                 // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
                 Bundle bundle=new Bundle();
-                bundle.putString("receiverName", users.get(position).getReceiverName());
-                bundle.putString("receiverID",users.get(position).getReceiverID());
+                bundle.putString("receiverName", userNames.get(position));
+                bundle.putString("receiverID",userIDs.get(position));
                 fg.setArguments(bundle);
                 // adding fragment to relative layout by using layout id
                 getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
@@ -83,20 +87,23 @@ public class MessagesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+        // Burada sadece kullanıcının mesajlaştığı  userların ID'sini alıyoruz
         usersDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages");
 
-        // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
+        // anında eklemeyi sağlıyor value event listener.
         usersDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                users.clear();
+                userIDs.clear();
+
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
-                    Chat value = child.getValue(Chat.class);
-                    users.add(value);
+                    String s = child.getKey().toString();
+                    userIDs.add(s);
+
                 }
-                // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME
-                Collections.reverse(users);
                 // Verileri sürekli getirmesi için
                 messagesAdapter.notifyDataSetChanged();
             }
@@ -106,6 +113,31 @@ public class MessagesFragment extends Fragment {
 
             }
         });
+        // Burada kullanıcının mesajlaştığı idlerin isimlerini alıyoruz
+        namesDatabaseReference = mDatabase.child("users");
+        namesDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userNames.clear();
+
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (int i = 0 ; i<userIDs.size() ; i++){
+                    String userName = dataSnapshot.child(userIDs.get(i)).child("userDisplayName").getValue(String.class);
+                    userNames.add(userName);
+                }
+               
+                messagesAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
 
 
