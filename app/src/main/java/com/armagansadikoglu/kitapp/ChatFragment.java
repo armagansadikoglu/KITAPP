@@ -85,7 +85,9 @@ public class ChatFragment extends Fragment {
                     mDatabase.child("users").child(receiverID).child("messages").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(chatKey).setValue(chat);
 
 
-                    Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();}
+                    //Mesaj attıktan sonra temizlemek için
+                    chatEditText.setText("");
+                }
             }
         });
 

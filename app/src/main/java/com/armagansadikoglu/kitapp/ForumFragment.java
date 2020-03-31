@@ -69,17 +69,17 @@ public class ForumFragment extends Fragment {
                     // Üst üste yazmasın diye key oluşturma
                     String id = mDatabase.push().getKey();
                     // Tarihe bakılacak
-                    // Bu yöntem çalışmadı
-                    /*Map<String,String> timestamp =  ServerValue.TIMESTAMP;
-                    String s = timestamp.get(".sv");
-                    Topic topic = new Topic(forumAddEditText.getText().toString(), s.toString() ,FirebaseAuth.getInstance().getCurrentUser().getUid());*/
 
                     Topic topic = new Topic(forumAddEditText.getText().toString(), "10.01.2022",FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(id).setValue(topic);
 
-                    Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();}
+                    Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();
+                    // Edittexti temizleme
+                    forumAddEditText.setText("");
+                }
+
 
             }
         });

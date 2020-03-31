@@ -74,7 +74,10 @@ public class TopicMessagesFragment extends Fragment {
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(topicKey).child("messages").child(id).setValue(topic);
 
-                    Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();}
+                    //EditTexti temizleme
+                    topicMessagesAddMessageEditText.setText("");
+
+                }
 
             }
         });
