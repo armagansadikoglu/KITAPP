@@ -99,44 +99,50 @@ public class LoginActivity extends AppCompatActivity {
     public void loginButtonOnClick(View view){
         // Giriş işlemi
 
-        // Klavyeyi kapatma -- yoksa yazmaya devam eder
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-
 
         loginEmail = findViewById(R.id.loginEditTextEmail);
         loginPassword = findViewById(R.id.loginEditTextPassword);
 
-        loginProgressBar.setVisibility(ProgressBar.VISIBLE);
-        // Tıklamayı önleme
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        if (loginEmail.getText().toString().trim().length() == 0 ||loginPassword.getText().toString().trim().length() == 0){
+            Toast.makeText(this, R.string.registerError, Toast.LENGTH_SHORT).show();
+        }else{
+            loginProgressBar.setVisibility(ProgressBar.VISIBLE);
+            // Klavyeyi kapatma -- yoksa yazmaya devam eder
+            InputMethodManager inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        mAuth.signInWithEmailAndPassword(loginEmail.getText().toString(),loginPassword.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                loginProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                if (task.isSuccessful()){
-                   // FirebaseUser user = mAuth.getCurrentUser();
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+
+            // Tıklamayı önleme
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
+            mAuth.signInWithEmailAndPassword(loginEmail.getText().toString(),loginPassword.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            loginProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                            if (task.isSuccessful()){
+                                // FirebaseUser user = mAuth.getCurrentUser();
+                                //Tıklamayı geri verme
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                //Toast.makeText(LoginActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    }).addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     //Tıklamayı geri verme
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    //Toast.makeText(LoginActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(intent);
+                    Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-               // Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                //Tıklamayı geri verme
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        }
+
     }
 }

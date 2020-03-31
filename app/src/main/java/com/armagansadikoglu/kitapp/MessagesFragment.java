@@ -125,7 +125,7 @@ public class MessagesFragment extends Fragment {
                     String userName = dataSnapshot.child(userIDs.get(i)).child("userDisplayName").getValue(String.class);
                     userNames.add(userName);
                 }
-               
+
                 messagesAdapter.notifyDataSetChanged();
 
             }

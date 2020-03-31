@@ -38,6 +38,7 @@ public class AddNewNoticeFragment extends Fragment {
     private DatabaseReference mDatabase;
     // Fotolar için de bu id kullanılacak
     String id;
+    Boolean imageChosen = false;
 
     @Nullable
     @Override
@@ -65,11 +66,12 @@ public class AddNewNoticeFragment extends Fragment {
         buttonAddNewNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Alanlar boş mu kontrol ediliyor
+                // Alanlar boş mu kontrol ediliyor . imageViewNoticeAdd.getDrawable() == null foto için
                 if (editTextBookName.getText().toString().trim().length() == 0 ||
                         editTextBookPrice.getText().toString().trim().length() == 0 ||
-                        editTextBookDetails.getText().toString().trim().length() == 0) {
-
+                        editTextBookDetails.getText().toString().trim().length() == 0 ||
+                        imageChosen == false) {
+                    Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
                 } else {
 
                     mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -108,7 +110,7 @@ public class AddNewNoticeFragment extends Fragment {
     }
 
 
-    // KİTAP FOTOSU SONUCUNA GÖRE FOTOYU IMAGEVİEW'A YÜKLEYEN onActivityResult fonkisyonu
+    // KİTAP FOTOSU SONUCUNA GÖRE FOTOYU IMAGEVİEW'A YÜKLEYEN onActivityResult fonksiyonu
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,19 +118,10 @@ public class AddNewNoticeFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData()!=null){
             bookImageURI = data.getData();
             Picasso.get().load(bookImageURI).into(imageViewNoticeAdd);
-
-            //Tıklamayı önleme
-            /*
-            progressBarProfile.setVisibility(View.VISIBLE);
-            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);*/
-
+            imageChosen = true;
 
         }
 
-
-
     }
-
 
 }

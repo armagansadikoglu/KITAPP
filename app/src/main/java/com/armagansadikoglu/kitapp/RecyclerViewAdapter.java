@@ -22,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
     //// on clikc ınterface'i
@@ -61,7 +62,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
             holder.rowTvBookName.setText(mData.get(position).getBookName());
             holder.rowTvSeller.setText(mData.get(position).getSeller());
-            holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice()));
+            if (Locale.getDefault().getLanguage() == "tr"){
+                holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " ₺"));
+            }else {
+                holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " €/$"));
+            }
+
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
