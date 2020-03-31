@@ -73,43 +73,12 @@ public class HomeFragment extends Fragment {
 
                         // Menüye yeni item eklenirse diye ifle kontrol ettirdim
                         if (item.getItemId() == R.id.popupmenusendmessage){
-                            final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            final DatabaseReference databaseReference = database.getReference().child("users").child(currentUser.getUid()).child("messages");
-                            //final ArrayList<Chat> chats = new ArrayList<>();
-
-                            /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    // chats.clear();
-                                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                                    for (DataSnapshot child:children) {
-                                        Chat chat = child.getValue(Chat.class);
-                                        // Daha önceden chat oluşmuş mu ? kontrolü
-                                        if (child.getKey().equals(notices.get(position).getUserID())){
-                                            bundle.putString("receiverID",notices.get(position).getUserID());
-                                        }else{
-                                            String id = database.getReference().push().getKey();
-                                            databaseReference.child(id);
-                                            bundle.putString("receiverID",id);
-                                        }
-                                        //chats.add(chat);
-                                    }
-                                    // Verileri sürekli getirmesi için
-                                    recyclerViewAdapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });*/
 
                             bundle.putString("receiverName", notices.get(position).getSeller());
                             bundle.putString("receiverID",notices.get(position).getUserID());
                             fg.setArguments(bundle);
                             // adding fragment to relative layout by using layout id
-                            getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                            getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("HomeFragment").commit();
                             Toast.makeText(getContext(), notices.get(position).getSeller(), Toast.LENGTH_SHORT).show();
 
                         }

@@ -64,7 +64,7 @@ public class MessagesFragment extends Fragment {
                 bundle.putString("receiverID",userIDs.get(position));
                 fg.setArguments(bundle);
                 // adding fragment to relative layout by using layout id
-                getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("MessagesFragment").commit();
 
                 // layoutu güncelleme
                 //forumRecyclerViewAdapter.notifyItemChanged(position);

@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -94,22 +95,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.nav_menu_home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_newNotice:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AddNewNoticeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AddNewNoticeFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_messages:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MessagesFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MessagesFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_profile:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_cart:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ShoppingsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ShoppingsFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_forum:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ForumFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ForumFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_star:
                         break;
@@ -137,8 +138,14 @@ public class MainActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }else{
-            super.onBackPressed();
+            //super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
         }
+
 
     }
 }

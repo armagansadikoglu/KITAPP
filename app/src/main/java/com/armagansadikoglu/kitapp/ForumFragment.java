@@ -107,7 +107,7 @@ public class ForumFragment extends Fragment {
                 bundle.putString("topicKey",topics.get(position).getKey());
                 fg.setArguments(bundle);
                 // adding fragment to relative layout by using layout id
-                getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("ForumFragment").commit();
 
                 // layoutu güncelleme
                 //forumRecyclerViewAdapter.notifyItemChanged(position);
