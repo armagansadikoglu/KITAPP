@@ -5,11 +5,8 @@ public class Notice {
     private String Seller;
     private Long Price;
     private  String UserID;
-
     private String BookDetails;
     private String NoticeID;
-    // private Bitmap Image;
-
 
     public Notice(String bookName,Long price, String seller ,String userID,String bookDetails,String noticeID) {
         BookName = bookName;

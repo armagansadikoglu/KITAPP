@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -115,7 +116,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_menu_star:
                         break;
                     case R.id.nav_menu_logout:
+                        // Kullanıcıyı logged out yapıp login sayfasına attık
                         FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(intent);
                         break;
                 }
 

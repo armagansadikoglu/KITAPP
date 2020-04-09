@@ -33,10 +33,13 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar loginProgressBar;
     private FirebaseAuth mAuth;
 
+    FirebaseAuth.AuthStateListener authStateListener;
+
+// auth state listenerı mauth'a tanımladık.
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.addAuthStateListener(authStateListener);
     }
 
     @Override
@@ -47,6 +50,19 @@ public class LoginActivity extends AppCompatActivity {
         loginProgressBar = findViewById(R.id.loginProgressBar);
         register = findViewById(R.id.loginRegisterTextView);
         forgotpassword = findViewById(R.id.loginForgotPasswordTextView);
+
+        // Kullanıcıyı logged in ise MainActivity'e at
+         authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                if (firebaseUser != null) {
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        };
+
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override

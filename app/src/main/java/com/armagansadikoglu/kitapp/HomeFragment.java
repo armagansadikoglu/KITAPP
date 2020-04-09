@@ -2,6 +2,7 @@ package com.armagansadikoglu.kitapp;
 
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,8 +51,6 @@ public class HomeFragment extends Fragment {
 
         // Tek satırda 2 adet ürün sergilemek için
         myrcyclerview.setLayoutManager(new GridLayoutManager(getActivity(),2));
-
-
 
         // TIKLANAN İLANA YAPILACAKLAR
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
