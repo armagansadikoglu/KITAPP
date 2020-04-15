@@ -39,4 +39,5 @@
     <string name="fail" >Fail</string>
     <string name="typehere">Type Here</string>
     <string name="sendmessage">Send Message</string>
+    <string name="messagenotification">You Have New Message</string>
 </resources>

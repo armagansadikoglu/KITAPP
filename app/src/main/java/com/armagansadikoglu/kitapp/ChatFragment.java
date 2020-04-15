@@ -1,6 +1,7 @@
 package com.armagansadikoglu.kitapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ChatFragment extends Fragment {
     RecyclerView chatRecyclerView;
@@ -32,12 +32,17 @@ public class ChatFragment extends Fragment {
     String receiverName,receiverID;
     View view;
 
+
     String chatKey;
 
     ArrayList<Chat> chats = new ArrayList<>();
 
     private DatabaseReference mDatabase;
     DatabaseReference chatsDatabaseReference;
+     // bildirimler için
+    DatabaseReference serverkeyDatabaseReference;
+    String server_key ;
+    String baseURL = "https://fcm.googleapis.com/fcm/";
 
 
 
@@ -55,7 +60,7 @@ public class ChatFragment extends Fragment {
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
 
         final String displayName;
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser().getDisplayName() == null){
             displayName = firebaseAuth.getCurrentUser().getEmail();
         }else{
@@ -84,9 +89,45 @@ public class ChatFragment extends Fragment {
 
                     mDatabase.child("users").child(receiverID).child("messages").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(chatKey).setValue(chat);
 
+                    Notification notification = new Notification(firebaseAuth.getCurrentUser().getUid(), firebaseAuth.getCurrentUser().getDisplayName(), chatEditText.getText().toString());
+                    mDatabase.child("notifications").child(receiverID).child(mDatabase.push().getKey()).setValue(notification);
+/*
+                ////////////////////////////////////////////////////////////////////////////
+                    Retrofit retrofit = new Retrofit.Builder().
+                            baseUrl(baseURL).
+                            addConverterFactory(GsonConverterFactory.create()).
+                            build();
+
+                    FCMInterface myInterface = retrofit.create(FCMInterface.class);
+
+
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type:","application/json");
+                    headers.put("Authorization:","key="+server_key);
+
+                    FCMModel.Data data = new FCMModel.Data(String.valueOf(R.string.messagenotification),chatEditText.getText().toString(),"message");
+                    FCMModel notification = new FCMModel(data,
+                            "ecMuPv5cQ1istySsp_2_VZ:APA91bGvfXSKqKXqg45aPZRmufZe8I-nXBMM7A3kWY_ttUiQYf9AmeE-musfDQWKhHU1CP3DfPn_Htx3VnvckP45KamOi5iGf2RDAQ-zJLDU1-f7FiloC5emk60p-nOxN0TcGZdHesRl");
+
+                    Call<Response<FCMModel>> responseCall = myInterface.sendNotification(headers, notification);
+                    responseCall.enqueue(new Callback<Response<FCMModel>>() {
+                        @Override
+                        public void onResponse(Call<Response<FCMModel>> call, Response<Response<FCMModel>> response) {
+                            Log.d("RETROFİT BAŞARILI", response.toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<Response<FCMModel>> call, Throwable t) {
+                            Log.d("RETROFİT HATA", t.toString());
+                        }
+                    });
+
+                    //////////////////////////////////////////////////////////////////
+                    */
 
                     //Mesaj attıktan sonra temizlemek için
                     chatEditText.setText("");
+
                 }
             }
         });
@@ -103,8 +144,29 @@ public class ChatFragment extends Fragment {
         receiverName= getArguments().getString("receiverName");
         receiverID = getArguments().getString("receiverID");
 
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+        //Server keyini okuma
+        serverkeyDatabaseReference = mDatabase.child("server");
+        serverkeyDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               /* Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    server_key = child.getValue(String.class);
+                }*/
+               // Üstteki de çalışıyor zaten ama tekli için böyle de bir yöntem varmış
+                DataSnapshot next = dataSnapshot.getChildren().iterator().next();
+                String s = next.getValue().toString();
+                Log.d("Server KEY", s);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
             chatsDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID);
 

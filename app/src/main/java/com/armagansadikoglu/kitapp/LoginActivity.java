@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class LoginActivity extends AppCompatActivity {
     TextView register,forgotpassword;
@@ -40,6 +45,26 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(authStateListener);
+
+    }
+    // Bildirim için gerek Firebase Cloud Messaging tokenı oluşturan fonksiyon
+    private void initFCM() {
+
+       FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String token = instanceIdResult.getToken();
+                Log.d("login token", "token :  " + token);
+                if(FirebaseAuth.getInstance().getCurrentUser() != null ) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("fcm_token").setValue(token);
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -145,6 +170,9 @@ public class LoginActivity extends AppCompatActivity {
                                 //Tıklamayı geri verme
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 //Toast.makeText(LoginActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
+
+                                initFCM();
+
                                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                                 startActivity(intent);
                             }
