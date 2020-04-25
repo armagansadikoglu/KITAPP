@@ -3,7 +3,10 @@ package com.armagansadikoglu.kitapp;
 public class User {
     private String userID;
     private String userDisplayName;
-    public User(){}
+
+    public User() {
+    }
+
     public User(String userID, String userDisplayName) {
         this.userID = userID;
         this.userDisplayName = userDisplayName;

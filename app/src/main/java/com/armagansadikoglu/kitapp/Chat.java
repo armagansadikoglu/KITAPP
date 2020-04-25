@@ -9,7 +9,8 @@ public class Chat {
     private String message;
     private String date;
 
-    public Chat(){}
+    public Chat() {
+    }
 
     public Chat(String chatKey, String senderID, String senderName, String receiverID, String receiverName, String message, String date) {
         this.chatKey = chatKey;

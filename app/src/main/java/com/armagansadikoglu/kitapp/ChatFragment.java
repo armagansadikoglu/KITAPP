@@ -23,13 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ChatFragment extends Fragment {
     RecyclerView chatRecyclerView;
     ChatAdapter chatAdapter;
     EditText chatEditText;
     Button chatSendButton;
-    String receiverName,receiverID;
+    String receiverName, receiverID;
     View view;
 
 
@@ -39,31 +40,32 @@ public class ChatFragment extends Fragment {
 
     private DatabaseReference mDatabase;
     DatabaseReference chatsDatabaseReference;
-     // bildirimler için
+    // bildirimler için
     DatabaseReference serverkeyDatabaseReference;
-    String server_key ;
+    String server_key;
     String baseURL = "https://fcm.googleapis.com/fcm/";
-
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=  inflater.inflate(R.layout.fragment_chat,container,false);
+        view = inflater.inflate(R.layout.fragment_chat, container, false);
         chatRecyclerView = view.findViewById(R.id.chatRecyclerView);
         chatEditText = view.findViewById(R.id.chatEditText);
-        chatSendButton =  view.findViewById(R.id.chatSendButton);
+        chatSendButton = view.findViewById(R.id.chatSendButton);
 
 
-        chatAdapter = new ChatAdapter(getContext(),chats);
+        chatAdapter = new ChatAdapter(getContext(), chats);
         chatRecyclerView.setAdapter(chatAdapter);
-        chatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
+
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+
 
         final String displayName;
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser().getDisplayName() == null){
+        if (firebaseAuth.getCurrentUser().getDisplayName() == null) {
             displayName = firebaseAuth.getCurrentUser().getEmail();
-        }else{
+        } else {
             displayName = firebaseAuth.getCurrentUser().getDisplayName();
         }
         // Mesaj gönderme
@@ -71,9 +73,9 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Boşluk kontrolü
-                if (chatEditText.getText().toString().equals("")){
+                if (chatEditText.getText().toString().equals("")) {
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     // Üst üste yazmasın diye key oluşturma
                     chatKey = mDatabase.push().getKey();
                     // Tarihe bakılacak
@@ -81,7 +83,7 @@ public class ChatFragment extends Fragment {
                     //String displayName;
 
 
-                    Chat chat = new Chat(chatKey,FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName,receiverID,receiverName,chatEditText.getText().toString(),"10.10.2010");
+                    Chat chat = new Chat(chatKey, FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName, receiverID, receiverName, chatEditText.getText().toString(), "10.10.2010");
 
                     mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID).child(chatKey).setValue(chat);
 
@@ -101,6 +103,7 @@ public class ChatFragment extends Fragment {
 
         return view;
     }
+
     // Mesajları Getirme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,7 +111,7 @@ public class ChatFragment extends Fragment {
 
 
         // MessagesFragment'dan gelen bilgileri aldık
-        receiverName= getArguments().getString("receiverName");
+        receiverName = getArguments().getString("receiverName");
         receiverID = getArguments().getString("receiverID");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -123,7 +126,7 @@ public class ChatFragment extends Fragment {
                 for (DataSnapshot child : children) {
                     server_key = child.getValue(String.class);
                 }*/
-               // Üstteki de çalışıyor zaten ama tekli için böyle de bir yöntem varmış
+                // Üstteki de çalışıyor zaten ama tekli için böyle de bir yöntem varmış
                 DataSnapshot next = dataSnapshot.getChildren().iterator().next();
                 String s = next.getValue().toString();
                 Log.d("Server KEY", s);
@@ -135,34 +138,30 @@ public class ChatFragment extends Fragment {
             }
         });
 
-            chatsDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID);
+        chatsDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID);
 
-            // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
-            chatsDatabaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    chats.clear();
-                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                    for (DataSnapshot child : children) {
-                        Chat value = child.getValue(Chat.class);
-                        chats.add(value);
-                    }
-                    // Mesajlaşmada reverse etmeye gerek yok. Eski mesaj yukarıda kalsın
-                   // Collections.reverse(chats);
-
-                    // Verileri sürekli getirmesi için
-                    chatAdapter.notifyDataSetChanged();
+        // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
+        chatsDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chats.clear();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Chat value = child.getValue(Chat.class);
+                    chats.add(value);
                 }
+                // Mesajlaşmada reverse etmeye gerek yok. Eski mesaj yukarıda kalsın
+                 Collections.reverse(chats);
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Verileri sürekli getirmesi için
+                chatAdapter.notifyDataSetChanged();
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
-
-
+            }
+        });
 
 
     }

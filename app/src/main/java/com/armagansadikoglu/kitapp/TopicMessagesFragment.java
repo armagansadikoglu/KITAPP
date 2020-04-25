@@ -43,7 +43,7 @@ public class TopicMessagesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.topic_messages,container,false);
+        view = inflater.inflate(R.layout.topic_messages, container, false);
         // ForumFragment'dan bundle ile gönderilen isimi ve keyi alıyoruz
 
         Toast.makeText(getContext(), topicname, Toast.LENGTH_SHORT).show();
@@ -56,21 +56,19 @@ public class TopicMessagesFragment extends Fragment {
         topicMessagesAddMessageEditText = view.findViewById(R.id.topicMessagesAddMessageEditText);
 
 
-
-
         // Yeni mesaj ekleme
         topicMessagesSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Boşluk kontrolü
-                if (topicMessagesAddMessageEditText.getText().toString().equals("")){
+                if (topicMessagesAddMessageEditText.getText().toString().equals("")) {
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
 
                     // Üst üste yazmasın diye key oluşturma
                     String id = mDatabase.push().getKey();
                     // Tarihe bakılacak
-                    Topic topic = new Topic(topicMessagesAddMessageEditText.getText().toString(), "10.01.2022",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    Topic topic = new Topic(topicMessagesAddMessageEditText.getText().toString(), "10.01.2022", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(topicKey).child("messages").child(id).setValue(topic);
 
@@ -86,7 +84,7 @@ public class TopicMessagesFragment extends Fragment {
         topicMessagesRecyclerView.setAdapter(forumRecyclerViewAdapter);
 
         // Tek satırda 1 adet ürün sergilemek için
-        topicMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
+        topicMessagesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
 
         // TIKLANAN İTEME YAPILACAKLAR
@@ -113,7 +111,7 @@ public class TopicMessagesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        topicname= getArguments().getString("topicName");
+        topicname = getArguments().getString("topicName");
         topicKey = getArguments().getString("topicKey");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -136,8 +134,7 @@ public class TopicMessagesFragment extends Fragment {
                 Collections.reverse(topicMessages);
                 // Verileri sürekli getirmesi için
                 forumRecyclerViewAdapter.notifyDataSetChanged();
-                }
-
+            }
 
 
             @Override
@@ -145,7 +142,6 @@ public class TopicMessagesFragment extends Fragment {
 
             }
         });
-
 
 
     }

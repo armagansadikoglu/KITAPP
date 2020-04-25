@@ -11,7 +11,8 @@ public class Notification {
         this.message = message;
     }
 
-    public Notification(){}
+    public Notification() {
+    }
 
     public String getSenderUID() {
         return senderUID;

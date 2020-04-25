@@ -23,15 +23,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
     //// on clikc ınterface'i
 
     private OnItemClickListener mListener;
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
     /////////////////
@@ -51,8 +52,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
 
         View view;
-        view = LayoutInflater.from(mContext).inflate(R.layout.chat_frag_row,parent,false);
-        MyViewHolder viewHolder = new MyViewHolder(view,mListener); // burada m listener gönderildi
+        view = LayoutInflater.from(mContext).inflate(R.layout.chat_frag_row, parent, false);
+        MyViewHolder viewHolder = new MyViewHolder(view, mListener); // burada m listener gönderildi
 
         return viewHolder;
     }
@@ -64,16 +65,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
         holder.chatMessageTextView.setText(mData.get(position).getMessage());
         //BURASI ARTIK HATA VERMİYOR 
         /*
-        * Olması gereken :
-        * chatUserNameTextView = itemView.findViewById(R.id.chatUserNameTextView);
-        * Hata verdiren :
-        *
-        * chatUserNameTextView = itemView.findViewById(R.id.messageUserNameTextView);
-        * Bir önceki fragmenttaki textview'a erişmeye çalışılmış. Hata çözüldü.
-        *
-        * */
+         * Olması gereken :
+         * chatUserNameTextView = itemView.findViewById(R.id.chatUserNameTextView);
+         * Hata verdiren :
+         *
+         * chatUserNameTextView = itemView.findViewById(R.id.messageUserNameTextView);
+         * Bir önceki fragmenttaki textview'a erişmeye çalışılmış. Hata çözüldü.
+         *
+         * */
         holder.chatUserNameTextView.setText(mData.get(position).getSenderName());
-
 
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -85,7 +85,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
             public void onSuccess(Uri uri) {
                 profilePicture = uri;
                 // GLIDE DA PİCASSO DA ÇALIŞIYOR. PERFORMANS TESTLERİ YAPILIP KARAR VERİLECEK
-                Glide.with(mContext).load(profilePicture).apply(new RequestOptions().override(70,70)).into(holder.chatUserProfile);
+                Glide.with(mContext).load(profilePicture).apply(new RequestOptions().override(70, 70)).into(holder.chatUserProfile);
                 //Picasso.get().load(bookuri).resize(500,500).into(holder.rowPP);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -96,7 +96,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
         });
 
 
-
     }
 
 
@@ -104,8 +103,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     public int getItemCount() {
         return mData.size();
     }
+
     // interface buradan devam
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView chatUserNameTextView;
         private TextView chatMessageTextView;
@@ -125,9 +125,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null){
+                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if (position!= RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }

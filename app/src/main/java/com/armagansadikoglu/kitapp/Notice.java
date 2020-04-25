@@ -4,11 +4,11 @@ public class Notice {
     private String BookName;
     private String Seller;
     private Long Price;
-    private  String UserID;
+    private String UserID;
     private String BookDetails;
     private String NoticeID;
 
-    public Notice(String bookName,Long price, String seller ,String userID,String bookDetails,String noticeID) {
+    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID) {
         BookName = bookName;
         Seller = seller;
         Price = price;
@@ -17,7 +17,8 @@ public class Notice {
         NoticeID = noticeID;
     }
 
-    public Notice(){}
+    public Notice() {
+    }
 
     public String getBookName() {
         return BookName;

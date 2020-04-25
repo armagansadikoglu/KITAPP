@@ -17,11 +17,12 @@ public class ForumRecyclerViewAdapter extends RecyclerView.Adapter<ForumRecycler
     //// on clikc ınterface'i
 
     private RecyclerViewAdapter.OnItemClickListener mListener;
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(RecyclerViewAdapter.OnItemClickListener listener){
+    public void setOnItemClickListener(RecyclerViewAdapter.OnItemClickListener listener) {
         mListener = listener;
     }
     /////////////////
@@ -34,12 +35,13 @@ public class ForumRecyclerViewAdapter extends RecyclerView.Adapter<ForumRecycler
         this.mData = mData;
 
     }
+
     @NonNull
     @Override
     public ForumRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(mContext).inflate(R.layout.topicrow,parent,false);
-        ForumRecyclerViewAdapter.MyViewHolder viewHolder = new ForumRecyclerViewAdapter.MyViewHolder(view,mListener); // burada m listener gönderildi
+        view = LayoutInflater.from(mContext).inflate(R.layout.topicrow, parent, false);
+        ForumRecyclerViewAdapter.MyViewHolder viewHolder = new ForumRecyclerViewAdapter.MyViewHolder(view, mListener); // burada m listener gönderildi
 
         return viewHolder;
     }
@@ -55,8 +57,9 @@ public class ForumRecyclerViewAdapter extends RecyclerView.Adapter<ForumRecycler
     public int getItemCount() {
         return mData.size();
     }
+
     // interface buradan devam
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView rowTopic;
         private TextView rowCreator;
@@ -68,15 +71,15 @@ public class ForumRecyclerViewAdapter extends RecyclerView.Adapter<ForumRecycler
 
             rowTopic = itemView.findViewById(R.id.forumTextViewTopic);
             rowCreator = itemView.findViewById(R.id.forumTextViewCreator);
-            rowDate = itemView.findViewById(R.id.forumTextViewDate) ;
+            rowDate = itemView.findViewById(R.id.forumTextViewDate);
 
             // onclick interface
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null){
+                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if (position!= RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }

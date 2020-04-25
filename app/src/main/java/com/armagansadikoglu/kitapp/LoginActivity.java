@@ -33,29 +33,30 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 public class LoginActivity extends AppCompatActivity {
-    TextView register,forgotpassword;
-    EditText loginEmail,loginPassword;
+    TextView register, forgotpassword;
+    EditText loginEmail, loginPassword;
     ProgressBar loginProgressBar;
     private FirebaseAuth mAuth;
 
     FirebaseAuth.AuthStateListener authStateListener;
 
-// auth state listenerı mauth'a tanımladık.
+    // auth state listenerı mauth'a tanımladık.
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(authStateListener);
 
     }
+
     // Bildirim için gerek Firebase Cloud Messaging tokenı oluşturan fonksiyon
     private void initFCM() {
 
-       FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 String token = instanceIdResult.getToken();
                 Log.d("login token", "token :  " + token);
-                if(FirebaseAuth.getInstance().getCurrentUser() != null ) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     FirebaseDatabase.getInstance().getReference()
                             .child("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -77,12 +78,12 @@ public class LoginActivity extends AppCompatActivity {
         forgotpassword = findViewById(R.id.loginForgotPasswordTextView);
 
         // Kullanıcıyı logged in ise MainActivity'e at
-         authStateListener = new FirebaseAuth.AuthStateListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
                 if (firebaseUser != null) {
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
             }
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         forgotpassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
@@ -120,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 // Gets the layout params that will allow you to resize the layout
             ViewGroup.LayoutParams params = layout.getLayoutParams();
 // Changes the height and width to the specified *pixels*
-            params.height = height*40/100;
+            params.height = height * 40 / 100;
             layout.setLayoutParams(params);
         } else {
             // In portrait
@@ -129,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 // Gets the layout params that will allow you to resize the layout
             ViewGroup.LayoutParams params = layout.getLayoutParams();
 // Changes the height and width to the specified *pixels*
-            params.height = height*60/100;
+            params.height = height * 60 / 100;
 
             layout.setLayoutParams(params);
         }
@@ -137,16 +138,16 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void loginButtonOnClick(View view){
+    public void loginButtonOnClick(View view) {
         // Giriş işlemi
 
 
         loginEmail = findViewById(R.id.loginEditTextEmail);
         loginPassword = findViewById(R.id.loginEditTextPassword);
 
-        if (loginEmail.getText().toString().trim().length() == 0 ||loginPassword.getText().toString().trim().length() == 0){
+        if (loginEmail.getText().toString().trim().length() == 0 || loginPassword.getText().toString().trim().length() == 0) {
             Toast.makeText(this, R.string.registerError, Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             loginProgressBar.setVisibility(ProgressBar.VISIBLE);
             // Klavyeyi kapatma -- yoksa yazmaya devam eder
             InputMethodManager inputManager = (InputMethodManager)
@@ -160,12 +161,12 @@ public class LoginActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
-            mAuth.signInWithEmailAndPassword(loginEmail.getText().toString(),loginPassword.getText().toString())
+            mAuth.signInWithEmailAndPassword(loginEmail.getText().toString(), loginPassword.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             loginProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 // FirebaseUser user = mAuth.getCurrentUser();
                                 //Tıklamayı geri verme
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 initFCM();
 
-                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
                         }

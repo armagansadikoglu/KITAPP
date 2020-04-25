@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
         // Bildirime tıklayıp geldiyse
         String menuFragment = getIntent().getStringExtra("menuFragment");
 
-        if (menuFragment != null){
-            if (menuFragment.equals("messages")){
+        if (menuFragment != null) {
+            if (menuFragment.equals("messages")) {
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MessagesFragment()).addToBackStack("HomeFragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack("HomeFragment").commit();
 
             }
         }
@@ -57,13 +57,12 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
 
 
-
         // Navigation View kodları
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         //--- Navigation header'a erişim
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername =  headerView.findViewById(R.id.navHeaderTextView);
+        TextView navUsername = headerView.findViewById(R.id.navHeaderTextView);
         final ImageView navUserPic = headerView.findViewById(R.id.navImageView);
         // Kullanıcı profil fotosunu indirip navigationView'a koyma
 
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Uri img = uri;
                 // GLIDE DA PİCASSO DA ÇALIŞIYOR. PERFORMANS TESTLERİ YAPILIP KARAR VERİLECEK
-                Glide.with(getApplicationContext()).load(img).apply(new RequestOptions().override(600,600)).into(navUserPic);
+                Glide.with(getApplicationContext()).load(img).apply(new RequestOptions().override(600, 600)).into(navUserPic);
                 //Picasso.get().load(bookuri).resize(500,500).into(holder.rowPP);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -96,11 +95,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Kullanıcı adı varsa yüklüyoruz yoksa e-mail adresini kullanıyoruz
-        if (mAuth.getCurrentUser().getDisplayName() == null){
-            navUsername.setText(getString(R.string.hello,mAuth.getCurrentUser().getEmail()) );
-        }
-        else {
-            navUsername.setText( getString(R.string.hello, mAuth.getCurrentUser().getDisplayName()) );
+        if (mAuth.getCurrentUser().getDisplayName() == null) {
+            navUsername.setText(getString(R.string.hello, mAuth.getCurrentUser().getEmail()));
+        } else {
+            navUsername.setText(getString(R.string.hello, mAuth.getCurrentUser().getDisplayName()));
         }
 
 
@@ -108,31 +106,31 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.nav_menu_home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).addToBackStack("HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_newNotice:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AddNewNoticeFragment()).addToBackStack("HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddNewNoticeFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_messages:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MessagesFragment()).addToBackStack("HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MessagesFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_profile:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).addToBackStack("HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_cart:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ShoppingsFragment()).addToBackStack("HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingsFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_forum:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ForumFragment()).addToBackStack("HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ForumFragment()).addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_menu_star:
                         break;
                     case R.id.nav_menu_logout:
                         // Kullanıcıyı logged out yapıp login sayfasına attık
                         FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         break;
                 }
@@ -142,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             // Açılırken Home sayfasını aç
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             // navigation menüde home seçili olsun
             navigationView.setCheckedItem(R.id.nav_menu_home);
         }
@@ -154,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
     // Geri tuşuna basıldığında yapılacaklar
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        } else {
             //super.onBackPressed();
             if (getFragmentManager().getBackStackEntryCount() > 0) {
                 getFragmentManager().popBackStack();

@@ -37,18 +37,19 @@ public class MessagesFragment extends Fragment {
     private DatabaseReference mDatabase;
     DatabaseReference usersDatabaseReference;
     DatabaseReference namesDatabaseReference;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       view =  inflater.inflate(R.layout.fragment_messages,container,false);
-       messagesUsersRecylerView = view.findViewById(R.id.messagesUsersRecylerView);
-        messagesAdapter = new MessagesAdapter(getContext(),userIDs,userNames);
+        view = inflater.inflate(R.layout.fragment_messages, container, false);
+        messagesUsersRecylerView = view.findViewById(R.id.messagesUsersRecylerView);
+        messagesAdapter = new MessagesAdapter(getContext(), userIDs, userNames);
         // Tek satırda 1 adet ürün sergilemek için
-        messagesUsersRecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
-       messagesUsersRecylerView.setAdapter(messagesAdapter);
+        messagesUsersRecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        messagesUsersRecylerView.setAdapter(messagesAdapter);
 
         // TIKLANAN USER'A YAPILACAKLAR
-        messagesAdapter.setOnItemClickListener(new MessagesAdapter.OnItemClickListener(){
+        messagesAdapter.setOnItemClickListener(new MessagesAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClick(int position) {
@@ -59,9 +60,9 @@ public class MessagesFragment extends Fragment {
 
                 Fragment fg = new ChatFragment();
                 // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putString("receiverName", userNames.get(position));
-                bundle.putString("receiverID",userIDs.get(position));
+                bundle.putString("receiverID", userIDs.get(position));
                 fg.setArguments(bundle);
                 // adding fragment to relative layout by using layout id
                 getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("MessagesFragment").commit();
@@ -73,10 +74,7 @@ public class MessagesFragment extends Fragment {
         });
 
 
-
-
-
-       return  view;
+        return view;
     }
 
     //////////////////////////
@@ -122,7 +120,7 @@ public class MessagesFragment extends Fragment {
                 userNames.clear();
 
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (int i = 0 ; i<userIDs.size() ; i++){
+                for (int i = 0; i < userIDs.size(); i++) {
                     String userName = dataSnapshot.child(userIDs.get(i)).child("userDisplayName").getValue(String.class);
                     userNames.add(userName);
                 }
@@ -136,10 +134,6 @@ public class MessagesFragment extends Fragment {
 
             }
         });
-
-
-
-
 
 
     }

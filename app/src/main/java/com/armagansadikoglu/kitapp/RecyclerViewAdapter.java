@@ -24,15 +24,16 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Locale;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     //// on clikc ınterface'i
 
     private OnItemClickListener mListener;
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
     /////////////////
@@ -52,33 +53,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
 
         View view;
-        view = LayoutInflater.from(mContext).inflate(R.layout.row,parent,false);
-        MyViewHolder viewHolder = new MyViewHolder(view,mListener); // burada m listener gönderildi
+        view = LayoutInflater.from(mContext).inflate(R.layout.row, parent, false);
+        MyViewHolder viewHolder = new MyViewHolder(view, mListener); // burada m listener gönderildi
 
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-            holder.rowTvBookName.setText(mData.get(position).getBookName());
-            holder.rowTvSeller.setText(mData.get(position).getSeller());
-            if (Locale.getDefault().getLanguage() == "tr"){
-                holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " ₺"));
-            }else {
-                holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " €/$"));
-            }
+        holder.rowTvBookName.setText(mData.get(position).getBookName());
+        holder.rowTvSeller.setText(mData.get(position).getSeller());
+        if (Locale.getDefault().getLanguage() == "tr") {
+            holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " ₺"));
+        } else {
+            holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " €/$"));
+        }
 
 
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReference();
-            StorageReference profileImagesRef = storageRef.child(mData.get(position).getNoticeID());
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference profileImagesRef = storageRef.child(mData.get(position).getNoticeID());
 
-            profileImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        profileImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 bookuri = uri;
                 // GLIDE DA PİCASSO DA ÇALIŞIYOR. PERFORMANS TESTLERİ YAPILIP KARAR VERİLECEK
-                Glide.with(mContext).load(bookuri).apply(new RequestOptions().override(500,500)).into(holder.rowPP);
+                Glide.with(mContext).load(bookuri).apply(new RequestOptions().override(500, 500)).into(holder.rowPP);
                 //Picasso.get().load(bookuri).resize(500,500).into(holder.rowPP);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -89,16 +90,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
 
 
-
-        }
+    }
 
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
-        // interface buradan devam
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+
+    // interface buradan devam
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView rowTvPrice;
         private TextView rowTvSeller;
@@ -110,15 +111,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             rowPP = itemView.findViewById(R.id.rowPP);
             rowTvPrice = itemView.findViewById(R.id.rowTvPrice);
-            rowTvSeller = itemView.findViewById(R.id.rowTvSeller) ;
+            rowTvSeller = itemView.findViewById(R.id.rowTvSeller);
             rowTvBookName = itemView.findViewById(R.id.rowTvBookName);
             // onclick interface
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null){
+                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if (position!= RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }

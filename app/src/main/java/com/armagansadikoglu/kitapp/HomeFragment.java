@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -28,8 +29,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 
-
-
 public class HomeFragment extends Fragment {
 
     View v;
@@ -38,19 +37,18 @@ public class HomeFragment extends Fragment {
     ArrayList<Notice> notices = new ArrayList<>();
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        v = inflater.inflate(R.layout.fragment_home,container,false);
+        v = inflater.inflate(R.layout.fragment_home, container, false);
         myrcyclerview = v.findViewById(R.id.homeFragmentRecyclerView);
         //recyclerViewAdapter = new RecyclerViewAdapter(getContext(),lstNotice);
-        recyclerViewAdapter = new RecyclerViewAdapter(getContext(),notices);
+        recyclerViewAdapter = new RecyclerViewAdapter(getContext(), notices);
         myrcyclerview.setAdapter(recyclerViewAdapter);
 
         // Tek satırda 2 adet ürün sergilemek için
-        myrcyclerview.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        myrcyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         // TIKLANAN İLANA YAPILACAKLAR
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
@@ -58,23 +56,23 @@ public class HomeFragment extends Fragment {
             public void onItemClick(final int position) {
 
                 // Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getContext(),myrcyclerview);
+                PopupMenu popup = new PopupMenu(getContext(), myrcyclerview);
                 // Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
                 // Registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener( new PopupMenu.OnMenuItemClickListener() {
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
 
-                            // popup'a tıklanınca yapılacak
-                            Fragment fg = new ChatFragment();
-                            // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
-                            final Bundle bundle=new Bundle();
+                        // popup'a tıklanınca yapılacak
+                        Fragment fg = new ChatFragment();
+                        // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
+                        final Bundle bundle = new Bundle();
 
                         // Menüye yeni item eklenirse diye ifle kontrol ettirdim
-                        if (item.getItemId() == R.id.popupmenusendmessage){
+                        if (item.getItemId() == R.id.popupmenusendmessage) {
 
                             bundle.putString("receiverName", notices.get(position).getSeller());
-                            bundle.putString("receiverID",notices.get(position).getUserID());
+                            bundle.putString("receiverID", notices.get(position).getUserID());
                             fg.setArguments(bundle);
                             // adding fragment to relative layout by using layout id
                             getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("HomeFragment").commit();
@@ -88,12 +86,10 @@ public class HomeFragment extends Fragment {
                 popup.show();// Showing popup menu
 
 
-
                 // layoutu güncelleme
                 recyclerViewAdapter.notifyItemChanged(position);
             }
         });
-
 
 
         return v;
@@ -114,7 +110,7 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 notices.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child:children) {
+                for (DataSnapshot child : children) {
                     Notice value = child.getValue(Notice.class);
                     notices.add(value);
                 }
@@ -127,7 +123,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
 
 
     }

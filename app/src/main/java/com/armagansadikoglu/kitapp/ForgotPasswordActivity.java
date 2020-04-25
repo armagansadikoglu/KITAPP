@@ -25,6 +25,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     EditText forgotPasswordEmailEditText;
     ProgressBar forgotProgressBar;
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         forgotProgressBar = findViewById(R.id.forgotPasswordProgressBar);
     }
 
-    public void resetMyPasswordButtonOnClick(View view){
+    public void resetMyPasswordButtonOnClick(View view) {
         // Klavyeyi kapatma -- yoksa yazmaya devam eder
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -43,9 +44,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
 
-        if (forgotPasswordEmailEditText.getText().toString().trim().length() == 0){
+        if (forgotPasswordEmailEditText.getText().toString().trim().length() == 0) {
             Toast.makeText(this, R.string.registerError, Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             forgotProgressBar.setVisibility(ProgressBar.VISIBLE);
             // Tıklamayı önleme
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

@@ -34,8 +34,8 @@ public class ForumFragment extends Fragment {
     RecyclerView forumRecyclerView;
     ForumRecyclerViewAdapter forumRecyclerViewAdapter;
     ArrayList<Topic> topics = new ArrayList<>();
-    Button forumSearchButton,forumAddButton;
-    EditText forumSearchEditText,forumAddEditText;
+    Button forumSearchButton, forumAddButton;
+    EditText forumSearchEditText, forumAddEditText;
     private DatabaseReference mDatabase;
     DatabaseReference topicsDatabaseReference;
 
@@ -44,9 +44,8 @@ public class ForumFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_forum,container,false);
+        view = inflater.inflate(R.layout.fragment_forum, container, false);
         forumRecyclerView = view.findViewById(R.id.forumMessagesRecyclerView);
-
 
 
         forumSearchButton = view.findViewById(R.id.forumSearchTopicButton);
@@ -55,27 +54,25 @@ public class ForumFragment extends Fragment {
         forumAddEditText = view.findViewById(R.id.forumAddTopicEditText);
 
 
-
-
         // Topic ekleme
         forumAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Boşluk kontrolü
-                if (forumAddEditText.getText().toString().equals("")){
+                if (forumAddEditText.getText().toString().equals("")) {
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
 
                     // Üst üste yazmasın diye key oluşturma
                     String id = mDatabase.push().getKey();
                     // Tarihe bakılacak
 
-                    Topic topic = new Topic(forumAddEditText.getText().toString(), "10.01.2022",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    Topic topic = new Topic(forumAddEditText.getText().toString(), "10.01.2022", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(id).setValue(topic);
 
-                    Toast.makeText(getContext(),R.string.topicadded, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.topicadded, Toast.LENGTH_SHORT).show();
                     // Edittexti temizleme
                     forumAddEditText.setText("");
                 }
@@ -84,11 +81,11 @@ public class ForumFragment extends Fragment {
             }
         });
 
-        forumRecyclerViewAdapter = new ForumRecyclerViewAdapter(getContext(),topics);
+        forumRecyclerViewAdapter = new ForumRecyclerViewAdapter(getContext(), topics);
         forumRecyclerView.setAdapter(forumRecyclerViewAdapter);
 
         // Tek satırda 1 adet ürün sergilemek için
-        forumRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
+        forumRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
 
         // TIKLANAN TOPİC'E YAPILACAKLAR
@@ -102,9 +99,9 @@ public class ForumFragment extends Fragment {
 
                 Fragment fg = new TopicMessagesFragment();
                 // Fragmentlar arası bilgi alışverişi için bundle kullanımı
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putString("topicName", topics.get(position).getTopicName());
-                bundle.putString("topicKey",topics.get(position).getKey());
+                bundle.putString("topicKey", topics.get(position).getKey());
                 fg.setArguments(bundle);
                 // adding fragment to relative layout by using layout id
                 getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("ForumFragment").commit();

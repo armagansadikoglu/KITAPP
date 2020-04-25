@@ -23,15 +23,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder>{
+public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
     //// on clikc ınterface'i
 
     private OnItemClickListener mListener;
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
     /////////////////
@@ -43,7 +44,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     List<String> IDS;
     Uri profilePicture;
 
-    public MessagesAdapter(Context mContext, List<String> IDS,  List<String> Names ) {
+    public MessagesAdapter(Context mContext, List<String> IDS, List<String> Names) {
         this.mContext = mContext;
         this.IDS = IDS;
         this.Names = Names;
@@ -54,8 +55,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
 
         View view;
-        view = LayoutInflater.from(mContext).inflate(R.layout.messages_frag_users_row,parent,false);
-        MyViewHolder viewHolder = new MyViewHolder(view,mListener); // burada m listener gönderildi
+        view = LayoutInflater.from(mContext).inflate(R.layout.messages_frag_users_row, parent, false);
+        MyViewHolder viewHolder = new MyViewHolder(view, mListener); // burada m listener gönderildi
 
         return viewHolder;
     }
@@ -74,7 +75,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             public void onSuccess(Uri uri) {
                 profilePicture = uri;
                 // GLIDE DA PİCASSO DA ÇALIŞIYOR. PERFORMANS TESTLERİ YAPILIP KARAR VERİLECEK
-                Glide.with(mContext).load(profilePicture).apply(new RequestOptions().override(50,50)).into(holder.messagesUserProfile);
+                Glide.with(mContext).load(profilePicture).apply(new RequestOptions().override(50, 50)).into(holder.messagesUserProfile);
                 //Picasso.get().load(bookuri).resize(500,500).into(holder.rowPP);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -85,7 +86,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         });
 
 
-
     }
 
 
@@ -93,8 +93,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     public int getItemCount() {
         return Names.size();
     }
+
     // interface buradan devam
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView messagesUsernameTextView;
         private ImageView messagesUserProfile;
@@ -109,9 +110,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null){
+                    if (listener != null) {
                         int position = getAdapterPosition();
-                        if (position!= RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onItemClick(position);
                         }
                     }

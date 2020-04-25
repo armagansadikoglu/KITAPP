@@ -45,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
-    private static  final int PICK_IMAGE_REQUEST = 1;
+    private static final int PICK_IMAGE_REQUEST = 1;
     ImageView imageViewProfile;
     Uri imageURI;
 
@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData()!=null){
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageURI = data.getData();
             Picasso.get().load(imageURI).into(imageViewProfile);
 
@@ -72,7 +72,6 @@ public class ProfileFragment extends Fragment {
             progressBarProfile.setVisibility(View.VISIBLE);
             getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
 
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -85,7 +84,7 @@ public class ProfileFragment extends Fragment {
                     progressBarProfile.setVisibility(View.INVISIBLE);
                     //Tıklamayı geri verme
                     getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    Toast.makeText(getContext(),R.string.success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -96,13 +95,12 @@ public class ProfileFragment extends Fragment {
         }
 
 
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_profile,container,false);
+        v = inflater.inflate(R.layout.fragment_profile, container, false);
 
         imageViewProfile = v.findViewById(R.id.imageViewProfile);
 
@@ -124,7 +122,6 @@ public class ProfileFragment extends Fragment {
         });
 
 
-
         // Profil resmine tıkladı
         imageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +129,7 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent,PICK_IMAGE_REQUEST);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
 
@@ -181,11 +178,11 @@ public class ProfileFragment extends Fragment {
 
         profileRecylerView = v.findViewById(R.id.recyclerViewProfile);
         //recyclerViewAdapter = new RecyclerViewAdapter(getContext(),lstNotice);
-        recyclerViewAdapter = new RecyclerViewAdapter(getContext(),profileNotices);
+        recyclerViewAdapter = new RecyclerViewAdapter(getContext(), profileNotices);
         profileRecylerView.setAdapter(recyclerViewAdapter);
 
         // Tek satırda 2 adet ürün sergilemek için
-        profileRecylerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        profileRecylerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
 
         // TIKLANAN İTEME YAPILACAKLAR
@@ -198,7 +195,6 @@ public class ProfileFragment extends Fragment {
                 recyclerViewAdapter.notifyItemChanged(position);
             }
         });
-
 
 
         return v;
@@ -215,9 +211,9 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 profileNotices.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child:children) {
+                for (DataSnapshot child : children) {
                     Notice value = child.getValue(Notice.class);
-                    if (value.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){ // equals yerine == yazınca çalışmıyor
+                    if (value.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) { // equals yerine == yazınca çalışmıyor
                         profileNotices.add(value);
                     }
 

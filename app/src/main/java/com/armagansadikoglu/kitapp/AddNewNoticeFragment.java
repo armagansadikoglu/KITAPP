@@ -30,9 +30,9 @@ import com.squareup.picasso.Picasso;
 import static android.app.Activity.RESULT_OK;
 
 public class AddNewNoticeFragment extends Fragment {
-    private static  final int PICK_IMAGE_REQUEST = 2;
+    private static final int PICK_IMAGE_REQUEST = 2;
     Button buttonAddNewNotice;
-    EditText editTextBookName,editTextBookPrice,editTextBookDetails;
+    EditText editTextBookName, editTextBookPrice, editTextBookDetails;
     ImageView imageViewNoticeAdd;
     Uri bookImageURI;
     private DatabaseReference mDatabase;
@@ -43,7 +43,7 @@ public class AddNewNoticeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_addnewnotice,container,false);
+        View v = inflater.inflate(R.layout.fragment_addnewnotice, container, false);
 
         buttonAddNewNotice = v.findViewById(R.id.buttonAddNotice);
         editTextBookName = v.findViewById(R.id.editTextNoticeBookName);
@@ -59,7 +59,7 @@ public class AddNewNoticeFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent,PICK_IMAGE_REQUEST);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
 
@@ -77,7 +77,7 @@ public class AddNewNoticeFragment extends Fragment {
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     // Üst üste yazmasın diye key oluşturma
                     id = mDatabase.push().getKey();
-                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(), editTextBookDetails.getText().toString(),id);
+                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(), editTextBookDetails.getText().toString(), id);
                     mDatabase.child("notices").child(id).setValue(notice);
 
                     // KİTAP FOTOSUNU YÜKLEME
@@ -115,7 +115,7 @@ public class AddNewNoticeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData()!=null){
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             bookImageURI = data.getData();
             Picasso.get().load(bookImageURI).into(imageViewNoticeAdd);
             imageChosen = true;

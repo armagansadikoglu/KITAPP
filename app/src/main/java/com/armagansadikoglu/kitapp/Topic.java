@@ -3,8 +3,8 @@ package com.armagansadikoglu.kitapp;
 public class Topic {
     private String topicName;
     private String topicDate;
-    private  String topicCreatorUID;
-    private  String key;
+    private String topicCreatorUID;
+    private String key;
 
     public String getKey() {
         return key;
@@ -15,7 +15,8 @@ public class Topic {
     }
 
     //  users does not define no argument constructor [duplicate] hatası için boş constructor gerek
-    public Topic(){}
+    public Topic() {
+    }
 
     public Topic(String topicName, String topicDate, String topicCreatorUID) {
         this.topicName = topicName;
