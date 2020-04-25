@@ -91,39 +91,6 @@ public class ChatFragment extends Fragment {
 
                     Notification notification = new Notification(firebaseAuth.getCurrentUser().getUid(), firebaseAuth.getCurrentUser().getDisplayName(), chatEditText.getText().toString());
                     mDatabase.child("notifications").child(receiverID).child(mDatabase.push().getKey()).setValue(notification);
-/*
-                ////////////////////////////////////////////////////////////////////////////
-                    Retrofit retrofit = new Retrofit.Builder().
-                            baseUrl(baseURL).
-                            addConverterFactory(GsonConverterFactory.create()).
-                            build();
-
-                    FCMInterface myInterface = retrofit.create(FCMInterface.class);
-
-
-                    HashMap<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type:","application/json");
-                    headers.put("Authorization:","key="+server_key);
-
-                    FCMModel.Data data = new FCMModel.Data(String.valueOf(R.string.messagenotification),chatEditText.getText().toString(),"message");
-                    FCMModel notification = new FCMModel(data,
-                            "ecMuPv5cQ1istySsp_2_VZ:APA91bGvfXSKqKXqg45aPZRmufZe8I-nXBMM7A3kWY_ttUiQYf9AmeE-musfDQWKhHU1CP3DfPn_Htx3VnvckP45KamOi5iGf2RDAQ-zJLDU1-f7FiloC5emk60p-nOxN0TcGZdHesRl");
-
-                    Call<Response<FCMModel>> responseCall = myInterface.sendNotification(headers, notification);
-                    responseCall.enqueue(new Callback<Response<FCMModel>>() {
-                        @Override
-                        public void onResponse(Call<Response<FCMModel>> call, Response<Response<FCMModel>> response) {
-                            Log.d("RETROFİT BAŞARILI", response.toString());
-                        }
-
-                        @Override
-                        public void onFailure(Call<Response<FCMModel>> call, Throwable t) {
-                            Log.d("RETROFİT HATA", t.toString());
-                        }
-                    });
-
-                    //////////////////////////////////////////////////////////////////
-                    */
 
                     //Mesaj attıktan sonra temizlemek için
                     chatEditText.setText("");

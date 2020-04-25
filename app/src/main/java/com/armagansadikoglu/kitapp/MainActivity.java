@@ -7,6 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import androidx.fragment.app.Fragment;
+
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        // Bildirime tıklayıp geldiyse
+        String menuFragment = getIntent().getStringExtra("menuFragment");
+
+        if (menuFragment != null){
+            if (menuFragment.equals("messages")){
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MessagesFragment()).addToBackStack("HomeFragment").commit();
+
+            }
+        }
     }
 
     @Override
@@ -42,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         Toast.makeText(this, mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
+
 
 
         // Navigation View kodları
@@ -136,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     // Geri tuşuna basıldığında yapılacaklar
     @Override
     public void onBackPressed() {
