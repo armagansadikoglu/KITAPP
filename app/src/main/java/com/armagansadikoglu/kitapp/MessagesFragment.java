@@ -33,7 +33,7 @@ public class MessagesFragment extends Fragment {
 
     private  ArrayList<String> userIDs = new ArrayList<>();
     private ArrayList<String> userNames = new ArrayList<>();
-    
+
     private DatabaseReference mDatabase;
     private DatabaseReference usersDatabaseReference;
     private DatabaseReference namesDatabaseReference;

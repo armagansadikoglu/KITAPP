@@ -23,9 +23,11 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 public class ForumFragment extends Fragment {
@@ -72,8 +74,9 @@ public class ForumFragment extends Fragment {
                     // Üst üste yazmasın diye key oluşturma
                     String id = mDatabase.push().getKey();
                     // Tarihe bakılacak
-
-                    Topic topic = new Topic(forumAddEditText.getText().toString(), "10.01.2022", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
+                    String currentDateandTime = sdf.format(new Date());
+                    Topic topic = new Topic(forumAddEditText.getText().toString(), currentDateandTime, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(id).setValue(topic);

@@ -22,8 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 
 public class ChatFragment extends Fragment {
     RecyclerView chatRecyclerView;
@@ -83,7 +87,10 @@ public class ChatFragment extends Fragment {
                     //String displayName;
 
 
-                    Chat chat = new Chat(chatKey, FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName, receiverID, receiverName, chatEditText.getText().toString(), "10.10.2010");
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
+                    String currentDateandTime = sdf.format(new Date());
+                    //mesajın kendisi
+                    Chat chat = new Chat(chatKey, FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName, receiverID, receiverName, chatEditText.getText().toString(), currentDateandTime);
 
                     mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages").child(receiverID).child(chatKey).setValue(chat);
 
