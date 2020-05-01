@@ -40,4 +40,6 @@
     <string name="typehere">Type Here</string>
     <string name="sendmessage">Send Message</string>
     <string name="messagenotification">You Have New Message</string>
+    <string name="searchNotice">Type Book Name to be  Searched</string>
+
 </resources>

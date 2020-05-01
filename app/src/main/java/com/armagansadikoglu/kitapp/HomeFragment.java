@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class HomeFragment extends Fragment {
     View v;
     private RecyclerView myrcyclerview;
     private RecyclerViewAdapter recyclerViewAdapter;
+    private EditText homeBookSearchEditText;
+    private Button homeBookSearchButton;
     ArrayList<Notice> notices = new ArrayList<>();
 
 
@@ -42,6 +46,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.fragment_home, container, false);
+        homeBookSearchButton = v.findViewById(R.id.homeBookSearchButton);
+        homeBookSearchEditText = v.findViewById(R.id.homeBookSearchEditText);
+        homeBookSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchNotices(v);
+            }
+        });
         myrcyclerview = v.findViewById(R.id.homeFragmentRecyclerView);
         //recyclerViewAdapter = new RecyclerViewAdapter(getContext(),lstNotice);
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), notices);
@@ -96,7 +108,35 @@ public class HomeFragment extends Fragment {
 
 
     }
+    // ilan arama
+    private void searchNotices(View v) {
+        final String word = homeBookSearchEditText.getText().toString();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference().child("notices");
 
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                notices.clear();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Notice value = child.getValue(Notice.class);
+                    if (value.getBookName().toLowerCase().contains(word.toLowerCase()))
+                    notices.add(value);
+                }
+                // Verileri sürekli getirmesi için
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    // İlanları getirme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

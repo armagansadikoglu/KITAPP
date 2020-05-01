@@ -31,13 +31,13 @@ import java.util.Map;
 public class ForumFragment extends Fragment {
     View view;
 
-    RecyclerView forumRecyclerView;
-    ForumRecyclerViewAdapter forumRecyclerViewAdapter;
-    ArrayList<Topic> topics = new ArrayList<>();
-    Button forumSearchButton, forumAddButton;
-    EditText forumSearchEditText, forumAddEditText;
+    private RecyclerView forumRecyclerView;
+    private ForumRecyclerViewAdapter forumRecyclerViewAdapter;
+    private ArrayList<Topic> topics = new ArrayList<>();
+    private Button forumSearchButton, forumAddButton;
+    private EditText forumSearchEditText, forumAddEditText;
     private DatabaseReference mDatabase;
-    DatabaseReference topicsDatabaseReference;
+    private DatabaseReference topicsDatabaseReference;
 
 
     @Nullable
@@ -49,6 +49,12 @@ public class ForumFragment extends Fragment {
 
 
         forumSearchButton = view.findViewById(R.id.forumSearchTopicButton);
+        forumSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchTopic(v); // en aşağıda yazdım
+            }
+        });
         forumAddButton = view.findViewById(R.id.forumAddTopicButton);
         forumSearchEditText = view.findViewById(R.id.forumSearchTopicEditText);
         forumAddEditText = view.findViewById(R.id.forumAddTopicEditText);
@@ -134,6 +140,36 @@ public class ForumFragment extends Fragment {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
                     Topic value = child.getValue(Topic.class);
+                    topics.add(value);
+                }
+                // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME
+                Collections.reverse(topics);
+                // Verileri sürekli getirmesi için
+                forumRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+ // Aranan topici getirme
+    public void searchTopic(View view){
+        final String word = forumSearchEditText.getText().toString();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        topicsDatabaseReference = mDatabase.child("forumTopics");
+
+        // anında eklemeyi sağlıyor value event listener. addListenerForSingleValueEven işe yaramadı
+        topicsDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                topics.clear();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Topic value = child.getValue(Topic.class);
+                    if (value.getTopicName().toLowerCase().contains(word.toLowerCase())) // kelime substring olarak varsa ekliyoruz(case insensitive arama)
                     topics.add(value);
                 }
                 // DOĞRU SIRADA OLMASI İÇİN LİSTEYİ DÖNDÜRME

@@ -25,23 +25,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MessagesFragment extends Fragment {
-    View view;
+    private View view;
 
-    RecyclerView messagesUsersRecylerView;
-    MessagesAdapter messagesAdapter;
+    private RecyclerView messagesUsersRecylerView;
+    private MessagesAdapter messagesAdapter;
 
 
-    ArrayList<String> userIDs = new ArrayList<>();
-    ArrayList<String> userNames = new ArrayList<>();
-
+    private  ArrayList<String> userIDs = new ArrayList<>();
+    private ArrayList<String> userNames = new ArrayList<>();
+    
     private DatabaseReference mDatabase;
-    DatabaseReference usersDatabaseReference;
-    DatabaseReference namesDatabaseReference;
+    private DatabaseReference usersDatabaseReference;
+    private DatabaseReference namesDatabaseReference;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_messages, container, false);
+
         messagesUsersRecylerView = view.findViewById(R.id.messagesUsersRecylerView);
         messagesAdapter = new MessagesAdapter(getContext(), userIDs, userNames);
         // Tek satırda 1 adet ürün sergilemek için

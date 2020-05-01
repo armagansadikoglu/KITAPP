@@ -39,4 +39,5 @@
     <string name="typehere">Buraya Yazını</string>
     <string name="sendmessage">Mesaj Gönder</string>
     <string name="messagenotification">Yeni Mesajınız Var</string>
+    <string name="searchNotice">Aranacak Kitap Adını Yazınız</string>
 </resources>
