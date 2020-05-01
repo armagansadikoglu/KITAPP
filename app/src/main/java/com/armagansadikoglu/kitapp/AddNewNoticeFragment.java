@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,14 +34,16 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddNewNoticeFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 2;
-    Button buttonAddNewNotice;
-    EditText editTextBookName, editTextBookPrice, editTextBookDetails;
-    ImageView imageViewNoticeAdd;
-    Uri bookImageURI;
+    private Button buttonAddNewNotice;
+    private EditText editTextBookName, editTextBookPrice, editTextBookDetails;
+    private ImageView imageViewNoticeAdd;
+    private Uri bookImageURI;
     private DatabaseReference mDatabase;
     // Fotolar için de bu id kullanılacak
-    String id;
-    Boolean imageChosen = false;
+    private String id;
+    private Boolean imageChosen = false;
+
+    Spinner spinner;
 
     @Nullable
     @Override
@@ -50,6 +55,13 @@ public class AddNewNoticeFragment extends Fragment {
         editTextBookPrice = v.findViewById(R.id.editTextNoticeBookPrice);
         editTextBookDetails = v.findViewById(R.id.editTextNoticeBookDetails);
         imageViewNoticeAdd = v.findViewById(R.id.imageViewNoticeAdd);
+        // Türler için
+        spinner = v.findViewById(R.id.spinnerNewNotice);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.bookGenres));
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
+
 
 
         // KİTAP FOTOSUNU SEÇMEK İÇİN İNTENT BAŞLATMA
@@ -70,14 +82,14 @@ public class AddNewNoticeFragment extends Fragment {
                 if (editTextBookName.getText().toString().trim().length() == 0 ||
                         editTextBookPrice.getText().toString().trim().length() == 0 ||
                         editTextBookDetails.getText().toString().trim().length() == 0 ||
-                        imageChosen == false) {
+                        imageChosen == false || spinner.getSelectedItem().toString().equals("Tür Seçin") || spinner.getSelectedItem().toString().equals("Choose Genre") ) {
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
                 } else {
 
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     // Üst üste yazmasın diye key oluşturma
                     id = mDatabase.push().getKey();
-                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(), editTextBookDetails.getText().toString(), id);
+                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(), editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString());
                     mDatabase.child("notices").child(id).setValue(notice);
 
                     // KİTAP FOTOSUNU YÜKLEME

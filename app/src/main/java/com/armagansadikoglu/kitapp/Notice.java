@@ -7,17 +7,28 @@ public class Notice {
     private String UserID;
     private String BookDetails;
     private String NoticeID;
+    private String Genre;
 
-    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID) {
+    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID,String genre) {
         BookName = bookName;
         Seller = seller;
         Price = price;
         UserID = userID;
         BookDetails = bookDetails;
         NoticeID = noticeID;
+        Genre = genre;
     }
 
+
     public Notice() {
+    }
+
+    public String getGenre() {
+        return Genre;
+    }
+
+    public void setGenre(String genre) {
+        Genre = genre;
     }
 
     public String getBookName() {

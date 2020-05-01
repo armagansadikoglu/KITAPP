@@ -1,4 +1,24 @@
 <resources>
+
+    <string-array name="bookGenres">
+        <item>Choose Genre</item>
+        <item>Literature</item>
+        <item>Child</item>
+        <item>Education</item>
+        <item>History</item>
+        <item>Religion</item>
+        <item>Foreign Languages</item>
+        <item>Course/Exam Books</item>
+        <item>Art/Design</item>
+        <item>Philosophy</item>
+        <item>Comic Book</item>
+        <item>Science</item>
+        <item>Humor</item>
+        <item>Hobby</item>
+        <item>Mythology</item>
+        <item>Engineering</item>
+    </string-array>
+
     <string name="app_name">KITAPP</string>
     <string name="home">Home</string>
     <string name="messages">Messages</string>
