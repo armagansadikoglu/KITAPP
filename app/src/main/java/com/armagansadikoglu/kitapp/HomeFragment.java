@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment {
         myrcyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         // TIKLANAN İLANA YAPILACAKLAR
+
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final int position) {
@@ -94,6 +95,7 @@ public class HomeFragment extends Fragment {
                         return true;
                     }
                 });
+
                 Toast.makeText(getContext(), notices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
                 popup.show();// Showing popup menu
 

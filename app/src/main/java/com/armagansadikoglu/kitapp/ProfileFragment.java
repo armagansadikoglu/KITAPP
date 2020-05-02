@@ -6,12 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -188,7 +190,50 @@ public class ProfileFragment extends Fragment {
         // TIKLANAN İTEME YAPILACAKLAR
         recyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(final int position) {
+                // Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getContext(), profileRecylerView);
+                // Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_profile_menu, popup.getMenu());
+                // Registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        // popup'a tıklanınca yapılacak
+
+                        // Bunlar gereksiz gibi
+
+                        //Fragment fg = new ChatFragment();
+                        // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
+                        //final Bundle bundle = new Bundle();
+
+
+                        if (item.getItemId() == R.id.popupProfileDelete) {
+                            // İlanı Silme işlemi
+                            DatabaseReference mDatabase;
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child("notices").child(profileNotices.get(position).getNoticeID());
+                            mDatabase.removeValue();
+                            // Yüklenen fotoğrafı silme
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageRef = storage.getReference().child(profileNotices.get(position).getNoticeID());        // profileNotices.get(position).getNoticeID()+".jpeg"); yapınca olmyuyor
+                            storageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    // Toast.makeText(getContext(), "silindi", Toast.LENGTH_SHORT).show(); deneme amaçlı
+                                }
+                            });
+                            Toast.makeText(getContext(), R.string.noticeDeleted, Toast.LENGTH_SHORT).show();
+                        }else if (item.getItemId() == R.id.popupProfileSold){
+                            // İlanı Silme işlemi
+                            DatabaseReference mDatabase;
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child("notices").child(profileNotices.get(position).getNoticeID());
+                            mDatabase.removeValue();
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show();
                 //Toast.makeText(getContext(), lstNotice.get(position).getBookName(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(getContext(), profileNotices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
                 // layoutu güncelleme

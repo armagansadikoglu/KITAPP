@@ -61,5 +61,8 @@
     <string name="sendmessage">Send Message</string>
     <string name="messagenotification">You Have New Message</string>
     <string name="searchNotice">Type Book Name to be  Searched</string>
+    <string name="deleteNotice">Delete Notice</string>
+    <string name="noticeDeleted">Notice Deleted. Refresh the page to see differences.</string>
+    <string name="noticeSold">Set As Sold</string>
 
 </resources>
