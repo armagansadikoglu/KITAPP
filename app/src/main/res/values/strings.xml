@@ -64,5 +64,11 @@
     <string name="deleteNotice">Delete Notice</string>
     <string name="noticeDeleted">Notice Deleted. Refresh the page to see differences.</string>
     <string name="noticeSold">Set As Sold</string>
-
+    <string name="person">Type buyer\'s username</string>
+    <string name="areYouSure">Are you sure ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="doYouConfirm">Do you confirm that user below has acquired the book below ?</string>
+    <string name="book">Book</string>
+    <string name="buyer">Buyer</string>
 </resources>

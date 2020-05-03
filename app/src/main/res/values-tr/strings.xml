@@ -64,4 +64,11 @@
     <string name="deleteNotice">İlanı Sil</string>
     <string name="noticeDeleted">İlan Silindi. Değişiklikleri görmek için sayfayı yenileyin.</string>
     <string name="noticeSold">Satıldı İşaretle</string>
+    <string name="person">Alıcının kullanıcı adını giriniz</string>
+    <string name="areYouSure">Emin misin ?</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="doYouConfirm">"Aşağıdaki kullanıcının aşağıdaki kitabı aldığını onaylıyor musun ? "</string>
+    <string name="book">Kitap</string>
+    <string name="buyer">Alıcı</string>
 </resources>

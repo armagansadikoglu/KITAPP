@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_profile, container, false);
 
         imageViewProfile = v.findViewById(R.id.imageViewProfile);
-
+            // profil fotosunu çekme
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference profileImagesRef = storageRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -225,9 +225,21 @@ public class ProfileFragment extends Fragment {
                             Toast.makeText(getContext(), R.string.noticeDeleted, Toast.LENGTH_SHORT).show();
                         }else if (item.getItemId() == R.id.popupProfileSold){
                             // İlanı Silme işlemi
+                            /*
                             DatabaseReference mDatabase;
                             mDatabase = FirebaseDatabase.getInstance().getReference().child("notices").child(profileNotices.get(position).getNoticeID());
                             mDatabase.removeValue();
+                            */
+                            Fragment fg = new SoldFragment();
+                            // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
+                            Bundle bundle = new Bundle();
+                            bundle.putString("noticeID", profileNotices.get(position).getNoticeID());
+                            bundle.putString("bookName",profileNotices.get(position).getBookName());
+                            bundle.putLong("price",profileNotices.get(position).getPrice());
+                            fg.setArguments(bundle);
+                            // adding fragment to relative layout by using layout id
+                            getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("ProfileFragment").commit();
+
                         }
                         return true;
                     }
