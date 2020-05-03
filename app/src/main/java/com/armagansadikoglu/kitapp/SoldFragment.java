@@ -85,10 +85,16 @@ public class SoldFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //Toast.makeText(getContext(), "Kaydedilecek", Toast.LENGTH_SHORT).show();
+                                // Satışı yapan kullanıcıya ekleme
                                 DatabaseReference shoppingsDbReference = mDatabase.child("shoppings").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 ShoppingModel shopping = new ShoppingModel(bookName,noticeID,FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
                                         FirebaseAuth.getInstance().getCurrentUser().getUid(),userNames.get(position),userIDs.get(position),price);
                                 shoppingsDbReference.child(noticeID).setValue(shopping);
+                                // Alan kullanıcıya ekleme
+
+                                DatabaseReference dbref = mDatabase.child("shoppings").child(userIDs.get(position));
+                                // aynı bilgiler yazıldığı içim direk shopping burada da kullanılabilir
+                                dbref.child(noticeID).setValue(shopping);
                             }
                         })
                         .setCancelable(true)
