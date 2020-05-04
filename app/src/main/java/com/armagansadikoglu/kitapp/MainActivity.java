@@ -4,15 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.fragment.app.Fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +30,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
@@ -29,17 +41,27 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
 
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 2;
 
     @Override
     protected void onStart() {
         super.onStart();
         // Bildirime tıklayıp geldiyse
         String menuFragment = getIntent().getStringExtra("menuFragment");
-
+        // KONUM İLE İLGİLİ İZİN KONTROLÜ
+        if (ContextCompat.checkSelfPermission(
+                getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        )!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
+        }else getCurrentLocation();
         if (menuFragment != null) {
             if (menuFragment.equals("messages")) {
 
@@ -47,6 +69,60 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
+    // İZİN VERİLDİYSE YAPILACAKLAR
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length >0){
+            getCurrentLocation();
+        }else{
+            Toast.makeText(this, "izin verilmedi", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void getCurrentLocation() {
+        final LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(3000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.getFusedLocationProviderClient(MainActivity.this)
+                .requestLocationUpdates(locationRequest, new LocationCallback(){
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        super.onLocationResult(locationResult);
+                        LocationServices.getFusedLocationProviderClient(MainActivity.this)
+                            .removeLocationUpdates(this);
+                        if (locationResult != null && locationResult.getLocations().size()>0){
+                            int latestLocationIndex = locationResult.getLocations().size()-1;
+                            double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                            double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
+
+                            Geocoder geocoder;
+                            List<Address> addresses;
+                            geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+                            try {
+                                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                String state = addresses.get(0).getAdminArea(); // şehir
+                                String country = addresses.get(0).getCountryName(); // ülke
+                                Toast.makeText(MainActivity.this, "city : " + state+ " country : " + country, Toast.LENGTH_SHORT).show();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+
+                        }
+                    }
+
+                }, Looper.getMainLooper());
+
+
+
     }
 
     @Override
