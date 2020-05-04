@@ -89,7 +89,9 @@ public class AddNewNoticeFragment extends Fragment {
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     // Üst üste yazmasın diye key oluşturma
                     id = mDatabase.push().getKey();
-                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(), editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString());
+                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()),
+                            FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country);
                     mDatabase.child("notices").child(id).setValue(notice);
 
                     // KİTAP FOTOSUNU YÜKLEME

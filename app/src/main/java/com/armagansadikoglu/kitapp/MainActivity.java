@@ -48,6 +48,11 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
+    // static yaptım ki fragmentlarda erişebileyim
+    public static double latitude;
+    public static double longitude;
+    public static String state;
+    public static String country;
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 2;
 
@@ -97,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
                             .removeLocationUpdates(this);
                         if (locationResult != null && locationResult.getLocations().size()>0){
                             int latestLocationIndex = locationResult.getLocations().size()-1;
-                            double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                            double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
+                             latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                             longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
 
                             Geocoder geocoder;
                             List<Address> addresses;
@@ -106,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
                                 addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                String state = addresses.get(0).getAdminArea(); // şehir
-                                String country = addresses.get(0).getCountryName(); // ülke
+                                state = addresses.get(0).getAdminArea(); // şehir bu, city olsa null dönüyor
+                                country = addresses.get(0).getCountryName(); // ülke
                                 Toast.makeText(MainActivity.this, "city : " + state+ " country : " + country, Toast.LENGTH_SHORT).show();
 
                             } catch (IOException e) {

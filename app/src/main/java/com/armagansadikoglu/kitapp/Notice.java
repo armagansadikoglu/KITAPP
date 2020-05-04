@@ -8,8 +8,10 @@ public class Notice {
     private String BookDetails;
     private String NoticeID;
     private String Genre;
+    private String City;
+    private String Country;
 
-    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID,String genre) {
+    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID,String genre,String city,String country) {
         BookName = bookName;
         Seller = seller;
         Price = price;
@@ -17,10 +19,28 @@ public class Notice {
         BookDetails = bookDetails;
         NoticeID = noticeID;
         Genre = genre;
+        City = city;
+        Country = country;
     }
 
 
     public Notice() {
+    }
+
+    public String getCity() {
+        return City;
+    }
+
+    public void setCity(String city) {
+        City = city;
+    }
+
+    public String getCountry() {
+        return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
     }
 
     public String getGenre() {
