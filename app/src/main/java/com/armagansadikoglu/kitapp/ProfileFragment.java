@@ -57,7 +57,6 @@ public class ProfileFragment extends Fragment {
     Button buttonUpdateUserNameProfile;
     View v;
     private RecyclerView profileRecylerView;
-    //private List<Notice> lstNotice;
     private RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<Notice> profileNotices = new ArrayList<>();
 
@@ -143,36 +142,40 @@ public class ProfileFragment extends Fragment {
         buttonUpdateUserNameProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Tıklamayı önleme
-                progressBarProfile.setVisibility(View.VISIBLE);
-                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (editTextUserDisplayNameProfile.getText().toString().trim() .length() == 0) {  // boş bırakmış mı kontrolü
+                    Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show(); // registerda da kullandığım boş bırakmayın uyarısını ver
+                }else{
+                    //Tıklamayı önleme
+                    progressBarProfile.setVisibility(View.VISIBLE);
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                final String newUserName = editTextUserDisplayNameProfile.getText().toString();
+                    final String newUserName = editTextUserDisplayNameProfile.getText().toString();
 
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(newUserName)
-                        //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                        .build();
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(newUserName)
+                            //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                            .build();
 
-                user.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    progressBarProfile.setVisibility(View.INVISIBLE);
-                                    //Tıklamayı geri verme
-                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    // Databasedeki username'i de güncelledik
-                                    DatabaseReference usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
-                                    usersDatabaseReference.child(user.getUid()).child("userDisplayName").setValue(newUserName);
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        progressBarProfile.setVisibility(View.INVISIBLE);
+                                        //Tıklamayı geri verme
+                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        // Databasedeki username'i de güncelledik
+                                        DatabaseReference usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+                                        usersDatabaseReference.child(user.getUid()).child("userDisplayName").setValue(newUserName);
 
-                                    Toast.makeText(getContext(), R.string.updated, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.updated, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
 
             }
         });
@@ -207,9 +210,9 @@ public class ProfileFragment extends Fragment {
                         // Fragmentlar arası bilgi alışverişi için bundle kullanımı (tıklanan kullanıcının bilgileri gidiyor)
                         //final Bundle bundle = new Bundle();
 
-
+                        // İlanı Silme işlemi
                         if (item.getItemId() == R.id.popupProfileDelete) {
-                            // İlanı Silme işlemi
+
                             DatabaseReference mDatabase;
                             mDatabase = FirebaseDatabase.getInstance().getReference().child("notices").child(profileNotices.get(position).getNoticeID());
                             mDatabase.removeValue();

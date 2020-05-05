@@ -16,12 +16,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,6 +99,24 @@ public class SoldFragment extends Fragment {
                                 DatabaseReference dbref = mDatabase.child("shoppings").child(userIDs.get(position));
                                 // aynı bilgiler yazıldığı içim direk shopping burada da kullanılabilir
                                 dbref.child(noticeID).setValue(shopping);
+
+
+                                // İlanı silme
+                                DatabaseReference mDatabase;
+                                mDatabase = FirebaseDatabase.getInstance().getReference().child("notices").child(noticeID);
+                                mDatabase.removeValue();
+                                // Yüklenen fotoğrafı silme
+                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                StorageReference storageRef = storage.getReference().child(noticeID);        // profileNotices.get(position).getNoticeID()+".jpeg"); yapınca olmyuyor
+                                storageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        // Toast.makeText(getContext(), "silindi", Toast.LENGTH_SHORT).show(); deneme amaçlı
+                                    }
+                                });
+
+
+
                             }
                         })
                         .setCancelable(true)
