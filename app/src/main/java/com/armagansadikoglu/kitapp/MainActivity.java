@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
         // Bildirime tıklayıp geldiyse
         String menuFragment = getIntent().getStringExtra("menuFragment");
         // KONUM İLE İLGİLİ İZİN KONTROLÜ
