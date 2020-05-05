@@ -71,4 +71,7 @@
     <string name="doYouConfirm">Do you confirm that user below has acquired the book below ?</string>
     <string name="book">Book</string>
     <string name="buyer">Buyer</string>
+    <string name="noticesInMyCity">Show Notices Only  Current City</string>
+    <string name="noticesInMyCountry">Show Notices Only Current Country</string>
+    <string name="filtersTextview">Use filters below to filter results</string>
 </resources>

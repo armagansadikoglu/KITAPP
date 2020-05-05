@@ -7,9 +7,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +42,8 @@ public class HomeFragment extends Fragment {
     private RecyclerViewAdapter recyclerViewAdapter;
     private EditText homeBookSearchEditText;
     private Button homeBookSearchButton;
+    private RadioButton cityFilterRadioButton,countryFilterRadioButton;
+    private Spinner genreFilterSpinner;
     ArrayList<Notice> notices = new ArrayList<>();
 
 
@@ -46,6 +52,17 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        cityFilterRadioButton = v.findViewById(R.id.cityFilterRadioButton);
+        countryFilterRadioButton = v.findViewById(R.id.countryFilterRadioButton);
+
+        // Spinner
+        genreFilterSpinner = v.findViewById(R.id.genreFilterSpinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.bookGenres));
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genreFilterSpinner.setAdapter(spinnerAdapter);
+
+
         homeBookSearchButton = v.findViewById(R.id.homeBookSearchButton);
         homeBookSearchEditText = v.findViewById(R.id.homeBookSearchEditText);
         homeBookSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +72,7 @@ public class HomeFragment extends Fragment {
             }
         });
         myrcyclerview = v.findViewById(R.id.homeFragmentRecyclerView);
-        //recyclerViewAdapter = new RecyclerViewAdapter(getContext(),lstNotice);
+
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), notices);
         myrcyclerview.setAdapter(recyclerViewAdapter);
 
@@ -110,33 +127,7 @@ public class HomeFragment extends Fragment {
 
 
     }
-    // ilan arama
-    private void searchNotices(View v) {
-        final String word = homeBookSearchEditText.getText().toString();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference().child("notices");
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                notices.clear();
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    Notice value = child.getValue(Notice.class);
-                    if (value.getBookName().toLowerCase().contains(word.toLowerCase()))
-                    notices.add(value);
-                }
-                // Verileri sürekli getirmesi için
-                recyclerViewAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     // İlanları getirme
     @Override
@@ -168,4 +159,144 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+
+    // İLAN ARAMA
+    private void searchNotices(View v) {
+        final String word = homeBookSearchEditText.getText().toString();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference().child("notices");
+        //Toast.makeText(getContext(), MainActivity.country, Toast.LENGTH_SHORT).show();
+        final String genre = genreFilterSpinner.getSelectedItem().toString();
+        if (genre.equals("Choose Genre") || genre.equals("Tür Seçin")){ // TÜR SEÇİLMEMİŞ
+            if (countryFilterRadioButton.isChecked()){
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        notices.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Notice value = child.getValue(Notice.class);
+                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCountry().equals(MainActivity.country))
+                                notices.add(value);
+                        }
+                        // Verileri sürekli getirmesi için
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }else if (cityFilterRadioButton.isChecked()){
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        notices.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Notice value = child.getValue(Notice.class);
+                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCity().equals(MainActivity.state))
+                                notices.add(value);
+                        }
+                        // Verileri sürekli getirmesi için
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }else {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        notices.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Notice value = child.getValue(Notice.class);
+                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()))
+                                notices.add(value);
+                        }
+                        // Verileri sürekli getirmesi için
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }else{ // TÜR SEÇİLMİŞ
+            if (countryFilterRadioButton.isChecked()){
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        notices.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Notice value = child.getValue(Notice.class);
+                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCountry().equals(MainActivity.country) && value.getGenre().equals(genre))
+                                notices.add(value);
+                        }
+                        // Verileri sürekli getirmesi için
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }else if (cityFilterRadioButton.isChecked()){
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        notices.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Notice value = child.getValue(Notice.class);
+                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCity().equals(MainActivity.state)&& value.getGenre().equals(genre))
+                                notices.add(value);
+                        }
+                        // Verileri sürekli getirmesi için
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }else {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        notices.clear();
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            Notice value = child.getValue(Notice.class);
+                            if (value.getBookName().toLowerCase().contains(word.toLowerCase())&& value.getGenre().equals(genre))
+                                notices.add(value);
+                        }
+                        // Verileri sürekli getirmesi için
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+
+
+    }
+
+
 }

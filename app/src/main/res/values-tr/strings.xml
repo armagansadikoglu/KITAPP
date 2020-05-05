@@ -71,4 +71,7 @@
     <string name="doYouConfirm">"Aşağıdaki kullanıcının aşağıdaki kitabı aldığını onaylıyor musun ? "</string>
     <string name="book">Kitap</string>
     <string name="buyer">Alıcı</string>
+    <string name="noticesInMyCity">Sadece  Bulunduğum Şehirdeki İlanları Göster:</string>
+    <string name="noticesInMyCountry">Sadece Bulunduğum Ülkedeki  İlanları Göster</string>
+    <string name="filtersTextview">Sonuçları filtrelemek için aşağıdaki filtreleri kullanabilirsiniz</string>
 </resources>
