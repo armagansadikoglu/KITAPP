@@ -115,6 +115,9 @@ public class SoldFragment extends Fragment {
                                     }
                                 });
 
+                                // Satıştan sonra anasayfaya atma
+                                Fragment fg = new HomeFragment();
+                                getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
 
 
                             }
@@ -131,7 +134,7 @@ public class SoldFragment extends Fragment {
     }
 
     //////////////////////////
-    /// KULLANICILARI GETİRME
+    /// DAHA ÖNCE MESAJ ATILMIŞ KULLANICILARI GETİRME
     ////////////
 
     @Override
@@ -142,7 +145,7 @@ public class SoldFragment extends Fragment {
 
 
         // Burada tüm userların idsini çekiyoruz
-        usersDatabaseReference = mDatabase.child("users");
+        usersDatabaseReference = mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("messages");
 
         // anında eklemeyi sağlıyor value event listener.
         usersDatabaseReference.addValueEventListener(new ValueEventListener() {
