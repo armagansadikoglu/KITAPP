@@ -23,8 +23,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,6 +47,8 @@ public class AddNewNoticeFragment extends Fragment {
     private Boolean imageChosen = false;
 
     Spinner spinner;
+
+    String displayName;
 
     @Nullable
     @Override
@@ -89,10 +94,29 @@ public class AddNewNoticeFragment extends Fragment {
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     // Üst üste yazmasın diye key oluşturma
                     id = mDatabase.push().getKey();
-                    Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()),
-                            FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                            editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country);
-                    mDatabase.child("notices").child(id).setValue(notice);
+
+
+                    DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
+                    DatabaseReference user = users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userDisplayName");
+                    user.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            displayName = dataSnapshot.getValue(String.class);
+                            Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()),
+                                    displayName, FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                    editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country);
+                            mDatabase.child("notices").child(id).setValue(notice);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+
 
                     // KİTAP FOTOSUNU YÜKLEME
                     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -107,6 +131,9 @@ public class AddNewNoticeFragment extends Fragment {
                             //Tıklamayı geri verme
                             //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
+                            // İlan eklendikten sonra ana sayfaya atma
+                            Fragment fg = new HomeFragment();
+                            getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

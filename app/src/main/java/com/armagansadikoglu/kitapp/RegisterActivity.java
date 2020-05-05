@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -89,6 +90,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                         usersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
                     } else {
                         Toast.makeText(RegisterActivity.this, R.string.registerFail, Toast.LENGTH_SHORT).show();
                         //Tıklamayı geri verme
