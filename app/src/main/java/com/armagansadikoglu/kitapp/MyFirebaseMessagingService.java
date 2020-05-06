@@ -1,8 +1,11 @@
 package com.armagansadikoglu.kitapp;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 
+import java.util.Map;
+
 import static com.armagansadikoglu.kitapp.App.CHANNEL_1_ID;
 
 
@@ -28,12 +33,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull final RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Map<String, String> data = remoteMessage.getData();
+        final String title = data.get("title");
+       final String body = data.get("body");
+        
 
-        final String bildirimTitle = remoteMessage.getNotification().getTitle();
-        final String bildirimBody = remoteMessage.getNotification().getBody(); // bu bizim notification_idmiz
 
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(bildirimBody);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("notifications").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(body);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -54,7 +60,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
                 Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
                         .setSmallIcon(R.drawable.ic_book_black_24dp) // düşük api tel için
-                        .setContentTitle(bildirimTitle)
+                        .setContentTitle(title)
                         .setContentText(senderName + ": " + message)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -63,7 +69,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .build();
                 notificationManagerCompat.notify(1, notification);
 
-                Log.e("FCM", "başlık: " + bildirimTitle + " body : " + bildirimBody);
+                Log.e("FCM", "başlık: " + title + " body : " + body);
 
 
             }
