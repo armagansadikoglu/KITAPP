@@ -61,12 +61,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        holder.rowTvBookName.setText(mData.get(position).getBookName());
-        holder.rowTvSeller.setText(mData.get(position).getSeller());
-        if (Locale.getDefault().getLanguage() == "tr") {
-            holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " ₺"));
+        String word = mContext.getResources().getString(R.string.bookName) + " : " + mData.get(position).getBookName() ;
+        holder.rowTvBookName.setText(word);
+        word =  mContext.getResources().getString(R.string.seller) + " : " + mData.get(position).getSeller() ;
+        holder.rowTvSeller.setText(word);
+        if (Locale.getDefault().getLanguage().equals("tr")) {
+            word = mContext.getResources().getString(R.string.bookPrice) + " : "+ String.valueOf(mData.get(position).getPrice()) + " ₺";
+            holder.rowTvPrice.setText(word);
         } else {
-            holder.rowTvPrice.setText(String.valueOf(mData.get(position).getPrice() + " €/$"));
+            word = mContext.getResources().getString(R.string.bookPrice) + " : "+ String.valueOf(mData.get(position).getPrice()) +" €/$";
+            holder.rowTvPrice.setText(word);
         }
 
 

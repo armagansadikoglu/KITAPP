@@ -74,4 +74,5 @@
     <string name="noticesInMyCity">Show Notices Only  Current City</string>
     <string name="noticesInMyCountry">Show Notices Only Current Country</string>
     <string name="filtersTextview">Use filters below to filter results</string>
+    <string name="seller">Seller</string>
 </resources>

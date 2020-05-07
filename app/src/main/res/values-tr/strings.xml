@@ -74,4 +74,5 @@
     <string name="noticesInMyCity">Sadece  Bulunduğum Şehirdeki İlanları Göster:</string>
     <string name="noticesInMyCountry">Sadece Bulunduğum Ülkedeki  İlanları Göster</string>
     <string name="filtersTextview">Sonuçları filtrelemek için aşağıdaki filtreleri kullanabilirsiniz</string>
+    <string name="seller">Satıcı</string>
 </resources>
