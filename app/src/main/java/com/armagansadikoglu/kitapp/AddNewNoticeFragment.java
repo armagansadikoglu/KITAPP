@@ -1,12 +1,12 @@
 package com.armagansadikoglu.kitapp;
 
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.LayoutRes;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -49,6 +49,7 @@ public class AddNewNoticeFragment extends Fragment {
     Spinner spinner;
 
     String displayName;
+
 
     @Nullable
     @Override
@@ -88,62 +89,62 @@ public class AddNewNoticeFragment extends Fragment {
                         editTextBookPrice.getText().toString().trim().length() == 0 ||
                         editTextBookDetails.getText().toString().trim().length() == 0 ||
                         imageChosen == false || spinner.getSelectedItem().toString().equals("Tür Seçin") || spinner.getSelectedItem().toString().equals("Choose Genre") ) {
-                    Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_LONG).show();
                 } else {
-
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
-                    // Üst üste yazmasın diye key oluşturma
-                    id = mDatabase.push().getKey();
-
-
-                    DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
-                    DatabaseReference user = users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userDisplayName");
-                    user.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            displayName = dataSnapshot.getValue(String.class);
-                            Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()),
-                                    displayName, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                    editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country);
-                            mDatabase.child("notices").child(id).setValue(notice);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                    if (editTextBookDetails.getText().length() > 200 || editTextBookName.getText().length() > 200 || editTextBookPrice.getText().length()>9){
+                        Toast.makeText(getContext(), R.string.tooLong, Toast.LENGTH_SHORT).show();
+                    }else{
+                        mDatabase = FirebaseDatabase.getInstance().getReference();
+                        // Üst üste yazmasın diye key oluşturma
+                        id = mDatabase.push().getKey();
 
 
+                        DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
+                        DatabaseReference user = users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userDisplayName");
+                        user.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                displayName = dataSnapshot.getValue(String.class);
+                                Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()),
+                                        displayName, FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                        editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country);
+                                mDatabase.child("notices").child(id).setValue(notice);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        // KİTAP FOTOSUNU YÜKLEME
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageRef = storage.getReference();
+                        StorageReference bookImageRef = storageRef.child(id);
+                        //StorageReference profileImagesRef = storageRef.child(id).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        UploadTask uploadTask = bookImageRef.putFile(bookImageURI);
+                        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                //  progressBarProfile.setVisibility(View.INVISIBLE);
+                                //Tıklamayı geri verme
+                                //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
+                                // İlan eklendikten sonra ana sayfaya atma
+                                Fragment fg = new HomeFragment();
+                                getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), R.string.fail, Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
 
+                        Toast.makeText(getContext(), R.string.noticeUploaded, Toast.LENGTH_SHORT).show();
+                    }
 
-                    // KİTAP FOTOSUNU YÜKLEME
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReference();
-                    StorageReference bookImageRef = storageRef.child(id);
-                    //StorageReference profileImagesRef = storageRef.child(id).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    UploadTask uploadTask = bookImageRef.putFile(bookImageURI);
-                    uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            //  progressBarProfile.setVisibility(View.INVISIBLE);
-                            //Tıklamayı geri verme
-                            //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
-                            // İlan eklendikten sonra ana sayfaya atma
-                            Fragment fg = new HomeFragment();
-                            getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), R.string.fail, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-
-                    Toast.makeText(getContext(), R.string.noticeUploaded, Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -29,7 +29,7 @@
     <string name="star">Uygulamayı Değerlendir</string>
     <string name="cart">Alışverişler</string>
     <string name="others">Diğerleri</string>
-    <string name="hello">Hoşgeldin \\n %1$s</string>
+    <string name="hello">Hoşgeldin         %1$s</string>
     <string name="emailhint">E-mail Adresinizi Giriniz</string>
     <string name="passwordhint">Şifrenizi Giriniz</string>
     <string name="loginButton">Giriş Yap</string>
@@ -75,4 +75,5 @@
     <string name="noticesInMyCountry">Sadece Bulunduğum Ülkedeki  İlanları Göster</string>
     <string name="filtersTextview">Sonuçları filtrelemek için aşağıdaki filtreleri kullanabilirsiniz</string>
     <string name="seller">Satıcı</string>
+    <string name="tooLong">Kitap detayları veya kitap adı için maksimum 200, fiyat için maksimum 9 karakter giriniz</string>
 </resources>
