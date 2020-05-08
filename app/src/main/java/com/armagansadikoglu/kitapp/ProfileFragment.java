@@ -144,14 +144,14 @@ public class ProfileFragment extends Fragment {
         buttonUpdateUserNameProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 boolean isusernameAvailable = userNameAvailable();
+                 boolean newName = userNameAvailable();
                 if (editTextUserDisplayNameProfile.getText().toString().trim() .length() == 0) {  // boş bırakmış mı kontrolü
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show(); // registerda da kullandığım boş bırakmayın uyarısını ver
                 }else{
 
                     if (editTextUserDisplayNameProfile.getText().toString().length() > 20){ // yeni kullanıcı adı uzun
                         Toast.makeText(getContext(), R.string.usernameLong, Toast.LENGTH_SHORT).show();
-                    }else if (isusernameAvailable == true){ // aynı isim kullanılıyor
+                    }else if (newName != true){ // aynı isim kullanılıyor
                         Toast.makeText(getContext(), "İSİM ALINMIŞ", Toast.LENGTH_SHORT).show();
                     }else{
                         //Tıklamayı önleme
