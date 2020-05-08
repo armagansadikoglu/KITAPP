@@ -81,4 +81,5 @@
     <string name="pleaseAllow">Uygulamanın çalışması için uygulamanın konum servislerine erişimine izin veriniz</string>
     <string name="usernameLong">Kullanıcı adı için maksimum 20 karakter girebilirsiniz</string>
     <string name="usernameExists">Kullanıcı adı alınmış. Başka bir kullanıcı adı giriniz</string>
+    <string name="shoopingsMade">Alışveriş Yapıldı</string>
 </resources>

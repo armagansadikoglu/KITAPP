@@ -81,5 +81,6 @@
     <string name="pleaseAllow">To use the app please allow the app to be able use location services </string>
     <string name="usernameLong">Maximum 20 characters allowed for username </string>
     <string name="usernameExists">Username is taken. Type another one</string>
+    <string name="shoopingsMade">Shopping(s) Made</string>
 
 </resources>

@@ -17,6 +17,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -26,7 +31,7 @@ import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     //// on clikc ınterface'i
-
+    private int shoppingsCount;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -76,9 +81,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.rowTvBookDetails.setText(word);
         word = mContext.getResources().getString(R.string.genre) + " : " + mData.get(position).getGenre();
         holder.rowTvGenre.setText(word);
+        // Yapılan alışveriş sayısını bulma
+        shoppingsCount = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference shoppings = reference.child("shoppings").child(mData.get(position).getUserID());
+        shoppings.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child: children){
+                    shoppingsCount++;
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+        word = shoppingsCount + " " + mContext.getResources().getString(R.string.shoopingsMade);
+        holder.rowTvShoppings.setText(word);
 
+        // İlan fotosunu çekme
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference profileImagesRef = storageRef.child(mData.get(position).getNoticeID());
@@ -98,6 +122,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        // Kullanıcının fotoğrafını çekme
+        StorageReference sellerImageRef = storageRef.child(mData.get(position).getUserID());
+        sellerImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                bookuri = uri;
+                // GLIDE DA PİCASSO DA ÇALIŞIYOR. PERFORMANS TESTLERİ YAPILIP KARAR VERİLECEK
+                Glide.with(mContext).load(bookuri).apply(new RequestOptions().override(500, 500)).into(holder.rowSellerPP);
+                //Picasso.get().load(bookuri).resize(500,500).into(holder.rowPP);
+            }
+        });
 
     }
 
@@ -117,6 +152,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView rowTvBookDetails;
         private TextView rowTvGenre;
 
+        private TextView rowTvShoppings;
+        private ImageView rowSellerPP;
+
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
@@ -126,6 +164,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             rowTvBookName = itemView.findViewById(R.id.rowTvBookName);
             rowTvGenre = itemView.findViewById(R.id.rowTvGenre);
             rowTvBookDetails = itemView.findViewById(R.id.rowTvBookDetails);
+            rowTvShoppings = itemView.findViewById(R.id.rowTvShoppings);
+            rowSellerPP = itemView.findViewById(R.id.rowSellerPP);
             // onclick interface
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
