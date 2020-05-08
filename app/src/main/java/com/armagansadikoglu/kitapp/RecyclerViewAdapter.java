@@ -72,6 +72,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             word = mContext.getResources().getString(R.string.bookPrice) + " : "+ String.valueOf(mData.get(position).getPrice()) +" €/$";
             holder.rowTvPrice.setText(word);
         }
+        word = mContext.getResources().getString(R.string.details) + " : " + mData.get(position).getBookDetails();
+        holder.rowTvBookDetails.setText(word);
+        word = mContext.getResources().getString(R.string.genre) + " : " + mData.get(position).getGenre();
+        holder.rowTvGenre.setText(word);
+
 
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -109,6 +114,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView rowTvSeller;
         private TextView rowTvBookName;
         private ImageView rowPP;
+        private TextView rowTvBookDetails;
+        private TextView rowTvGenre;
 
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -117,6 +124,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             rowTvPrice = itemView.findViewById(R.id.rowTvPrice);
             rowTvSeller = itemView.findViewById(R.id.rowTvSeller);
             rowTvBookName = itemView.findViewById(R.id.rowTvBookName);
+            rowTvGenre = itemView.findViewById(R.id.rowTvGenre);
+            rowTvBookDetails = itemView.findViewById(R.id.rowTvBookDetails);
             // onclick interface
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

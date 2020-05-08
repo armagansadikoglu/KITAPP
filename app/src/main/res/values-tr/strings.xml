@@ -76,4 +76,6 @@
     <string name="filtersTextview">Sonuçları filtrelemek için aşağıdaki filtreleri kullanabilirsiniz</string>
     <string name="seller">Satıcı</string>
     <string name="tooLong">Kitap detayları veya kitap adı için maksimum 200, fiyat için maksimum 9 karakter giriniz</string>
+    <string name="genre">Tür</string>
+    <string name="details">Kitap Detayları</string>
 </resources>

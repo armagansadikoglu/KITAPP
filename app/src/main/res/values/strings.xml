@@ -76,4 +76,7 @@
     <string name="filtersTextview">Use filters below to filter results</string>
     <string name="seller">Seller</string>
     <string name="tooLong">Type maximum 200 digits for book name or book details,9 digits for price</string>
+    <string name="genre">Genre</string>
+    <string name="details">Book Details</string>
+
 </resources>
