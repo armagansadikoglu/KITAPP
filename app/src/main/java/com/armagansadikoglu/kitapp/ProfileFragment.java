@@ -60,6 +60,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<Notice> profileNotices = new ArrayList<>();
 
+    boolean available = true;
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -142,39 +144,48 @@ public class ProfileFragment extends Fragment {
         buttonUpdateUserNameProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                 boolean isusernameAvailable = userNameAvailable();
                 if (editTextUserDisplayNameProfile.getText().toString().trim() .length() == 0) {  // boş bırakmış mı kontrolü
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show(); // registerda da kullandığım boş bırakmayın uyarısını ver
                 }else{
-                    //Tıklamayı önleme
-                    progressBarProfile.setVisibility(View.VISIBLE);
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                    final String newUserName = editTextUserDisplayNameProfile.getText().toString();
+                    if (editTextUserDisplayNameProfile.getText().toString().length() > 20){ // yeni kullanıcı adı uzun
+                        Toast.makeText(getContext(), R.string.usernameLong, Toast.LENGTH_SHORT).show();
+                    }else if (isusernameAvailable == true){ // aynı isim kullanılıyor
+                        Toast.makeText(getContext(), "İSİM ALINMIŞ", Toast.LENGTH_SHORT).show();
+                    }else{
+                        //Tıklamayı önleme
+                        progressBarProfile.setVisibility(View.VISIBLE);
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        final String newUserName = editTextUserDisplayNameProfile.getText().toString();
 
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(newUserName)
-                            //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                            .build();
+                        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        progressBarProfile.setVisibility(View.INVISIBLE);
-                                        //Tıklamayı geri verme
-                                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                        // Databasedeki username'i de güncelledik
-                                        DatabaseReference usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
-                                        usersDatabaseReference.child(user.getUid()).child("userDisplayName").setValue(newUserName);
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(newUserName)
+                                //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                .build();
 
-                                        Toast.makeText(getContext(), R.string.updated, Toast.LENGTH_SHORT).show();
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            progressBarProfile.setVisibility(View.INVISIBLE);
+                                            //Tıklamayı geri verme
+                                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                            // Databasedeki username'i de güncelledik
+                                            DatabaseReference usersDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+                                            usersDatabaseReference.child(user.getUid()).child("userDisplayName").setValue(newUserName);
+
+                                            Toast.makeText(getContext(), R.string.updated, Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    }
+
                 }
 
             }
@@ -258,6 +269,31 @@ public class ProfileFragment extends Fragment {
 
 
         return v;
+    }
+
+    private boolean userNameAvailable() {
+
+        final String newUserNme =  editTextUserDisplayNameProfile.getText().toString();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference users = reference.child("users");
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children){
+                    User value = child.getValue(User.class);
+                    if (value.getUserDisplayName().equals(newUserNme)){
+                        available = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return  available;
     }
 
     @Override

@@ -78,5 +78,8 @@
     <string name="tooLong">Type maximum 200 digits for book name or book details,9 digits for price</string>
     <string name="genre">Genre</string>
     <string name="details">Book Details</string>
+    <string name="pleaseAllow">To use the app please allow the app to be able use location services </string>
+    <string name="usernameLong">Maximum 20 characters allowed for username </string>
+    <string name="usernameExists">Username is taken. Type another one</string>
 
 </resources>

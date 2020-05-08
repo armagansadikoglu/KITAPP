@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
         )!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
-        }else getCurrentLocation();
+        }else{
+            getCurrentLocation();
+        }
         if (menuFragment != null) {
             if (menuFragment.equals("messages")) {
 
@@ -84,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length >0){
             getCurrentLocation();
         }else{
-            Toast.makeText(this, "izin verilmedi", Toast.LENGTH_SHORT).show();
+            // İzin verene kadar sorma
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
+            Toast.makeText(this, R.string.pleaseAllow, Toast.LENGTH_SHORT).show();
         }
 
     }
