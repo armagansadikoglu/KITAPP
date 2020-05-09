@@ -1,6 +1,7 @@
 package com.armagansadikoglu.kitapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,14 +14,17 @@ import androidx.fragment.app.Fragment;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(
                 getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
         )!= PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, getApplicationContext().getResources().getString(R.string.pleaseAllow), Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
+
         }else{
             getCurrentLocation();
         }
@@ -80,15 +86,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     // İZİN VERİLDİYSE YAPILACAKLAR
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length >0){
+        // && grantResults[0] == PackageManager.PERMISSION_GRANTED eklenmezse deny dediğimizde grantresults'da -1 değeri olur ve lenth değeri 0 dan büyük olacağıdndan içeri girer.
+        // Bu yüzden else kısmı çalışmıyordu
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length >0  && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             getCurrentLocation();
         }else{
-            // İzin verene kadar sorma
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
-            Toast.makeText(this, R.string.pleaseAllow, Toast.LENGTH_SHORT).show();
+            // İzin vermiyorsa izin iste sürekli
+
+            finish(); System.exit(0);
+
+
+            /*
+                Alternatif olarak
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+
+             */
+
+
         }
 
     }

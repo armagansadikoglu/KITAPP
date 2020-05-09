@@ -87,9 +87,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // kullanıcıyı database'e de kaydetme(messages kısmı için gerekti)
                         String displayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                        if (displayName == null) {
-                            displayName = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                        }
+                        displayName = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
                         User user = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName);
                         usersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
 
