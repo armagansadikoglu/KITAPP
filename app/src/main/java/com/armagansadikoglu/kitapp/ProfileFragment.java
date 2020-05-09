@@ -1,6 +1,10 @@
 package com.armagansadikoglu.kitapp;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +66,7 @@ public class ProfileFragment extends Fragment {
     ArrayList<Notice> profileNotices = new ArrayList<>();
 
     boolean available = true;
+
 
 
     @Override
@@ -129,10 +135,19 @@ public class ProfileFragment extends Fragment {
         imageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+
+                // İzin verilmiş mi kontrolü
+                if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), R.string.allowImage, Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_REQUEST);
+                }else { // izin verilmiş
+
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                }
+
             }
         });
 
@@ -270,6 +285,22 @@ public class ProfileFragment extends Fragment {
 
         return v;
     }
+
+    // İZİNE GÖRE YAPILACAKLAR
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PICK_IMAGE_REQUEST && grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            // İzin verildiyse intenti aç
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        }else {
+
+        }
+    }
+
 
     private boolean userNameAvailable() {
 

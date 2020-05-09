@@ -82,4 +82,5 @@
     <string name="usernameLong">Kullanıcı adı için maksimum 20 karakter girebilirsiniz</string>
     <string name="usernameExists">Kullanıcı adı alınmış. Başka bir kullanıcı adı giriniz</string>
     <string name="shoopingsMade">Alışveriş Yapıldı</string>
+    <string name="allowImage">Gereken izini vermezseniz fotoğraf seçemezsiniz. Fotoğraf seçmeden ilan eklemeyemez veya profil fotoğrafını değiştiremezsiniz</string>
 </resources>

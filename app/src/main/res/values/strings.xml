@@ -82,5 +82,6 @@
     <string name="usernameLong">Maximum 20 characters allowed for username </string>
     <string name="usernameExists">Username is taken. Type another one</string>
     <string name="shoopingsMade">Shopping(s) Made</string>
+    <string name="allowImage">If you don\'t allow permission you can\'t pick image. If there is no image you can\'t add notice or change profile photo</string>
 
 </resources>

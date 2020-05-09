@@ -1,7 +1,9 @@
 package com.armagansadikoglu.kitapp;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +39,7 @@ import com.squareup.picasso.Picasso;
 import static android.app.Activity.RESULT_OK;
 
 public class AddNewNoticeFragment extends Fragment {
-    private static final int PICK_IMAGE_REQUEST = 2;
+    private static final int PICK_IMAGE_REQUEST = 2; // Intent ve request için kullanabiliriz.
     private Button buttonAddNewNotice;
     private EditText editTextBookName, editTextBookPrice, editTextBookDetails;
     private ImageView imageViewNoticeAdd;
@@ -74,10 +77,18 @@ public class AddNewNoticeFragment extends Fragment {
         imageViewNoticeAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                // İzin verilmiş mi kontrolü
+                if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), R.string.allowImage, Toast.LENGTH_LONG).show();
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_REQUEST);
+                }else { // izin verilmiş
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                }
+
+
             }
         });
 
@@ -150,7 +161,20 @@ public class AddNewNoticeFragment extends Fragment {
         });
         return v;
     }
+    // İZİNE GÖRE YAPILACAKLAR
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PICK_IMAGE_REQUEST && grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            // İzin verildiyse intenti aç
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        }else {
 
+        }
+    }
 
     // KİTAP FOTOSU SONUCUNA GÖRE FOTOYU IMAGEVİEW'A YÜKLEYEN onActivityResult fonksiyonu
     @Override

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(
                 getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
         )!= PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, getApplicationContext().getResources().getString(R.string.pleaseAllow), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getApplicationContext().getResources().getString(R.string.pleaseAllow), Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
 
         }else{
