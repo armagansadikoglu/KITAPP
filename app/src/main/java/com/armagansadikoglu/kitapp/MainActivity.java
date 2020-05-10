@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
         )!= PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, getApplicationContext().getResources().getString(R.string.pleaseAllow), Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_LOCATION_PERMISSION);
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE_LOCATION_PERMISSION);
         }else{
             getCurrentLocation();
         }
