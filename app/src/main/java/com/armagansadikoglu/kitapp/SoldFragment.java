@@ -102,15 +102,8 @@ public class SoldFragment extends Fragment {
                                 DatabaseReference mDatabase;
                                 mDatabase = FirebaseDatabase.getInstance().getReference().child("notices").child(noticeID);
                                 mDatabase.removeValue();
-                                // Yüklenen fotoğrafı silme
-                                FirebaseStorage storage = FirebaseStorage.getInstance();
-                                StorageReference storageRef = storage.getReference().child(noticeID);        // profileNotices.get(position).getNoticeID()+".jpeg"); yapınca olmyuyor
-                                storageRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        // Toast.makeText(getContext(), "silindi", Toast.LENGTH_SHORT).show(); deneme amaçlı
-                                    }
-                                });
+                                // Yüklenen fotoğrafı silersen shoppingsde düzgün görüntülenmez.
+
 
                                 // Satıştan sonra anasayfaya atma
                                 Fragment fg = new HomeFragment();

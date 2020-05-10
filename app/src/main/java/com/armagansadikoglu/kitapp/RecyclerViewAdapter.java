@@ -31,8 +31,9 @@ import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     //// on clikc ınterface'i
-    private int shoppingsCount;
+    private int shoppingsCount = 0;
     private OnItemClickListener mListener;
+    String word;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -66,7 +67,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        String word = mContext.getResources().getString(R.string.bookName) + " : " + mData.get(position).getBookName() ;
+         word = mContext.getResources().getString(R.string.bookName) + " : " + mData.get(position).getBookName() ;
         holder.rowTvBookName.setText(word);
         word =  mContext.getResources().getString(R.string.seller) + " : " + mData.get(position).getSeller() ;
         holder.rowTvSeller.setText(word);
@@ -82,16 +83,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         word = mContext.getResources().getString(R.string.genre) + " : " + mData.get(position).getGenre();
         holder.rowTvGenre.setText(word);
         // Yapılan alışveriş sayısını bulma
-        shoppingsCount = 0;
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference shoppings = reference.child("shoppings").child(mData.get(position).getUserID());
+        DatabaseReference shoppings = reference.child("shoppings").child(mData.get(position).getUserID());
         shoppings.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child: children){
+                for (DataSnapshot child: children) {
                     shoppingsCount++;
                 }
+                word = shoppingsCount + " " + mContext.getResources().getString(R.string.shoopingsMade);
+                holder.rowTvShoppings.setText(word);
             }
 
             @Override
@@ -99,8 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             }
         });
-        word = shoppingsCount + " " + mContext.getResources().getString(R.string.shoopingsMade);
-        holder.rowTvShoppings.setText(word);
+
 
         // İlan fotosunu çekme
         FirebaseStorage storage = FirebaseStorage.getInstance();
