@@ -85,11 +85,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // Yapılan alışveriş sayısını bulma
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference shoppings = reference.child("shoppings").child(mData.get(position).getUserID());
+        final DatabaseReference shoppings = reference.child("shoppings").child(mData.get(position).getUserID());
         shoppings.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                shoppingsCount = 0;
                 for (DataSnapshot child: children) {
                     shoppingsCount++;
                 }
