@@ -19,16 +19,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
+
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
+
 
 public class ForumFragment extends Fragment {
     View view;
@@ -101,8 +101,8 @@ public class ForumFragment extends Fragment {
         forumRecyclerViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                //Toast.makeText(getContext(), lstNotice.get(position).getBookName(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), topics.get(position).getTopicName(), Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(getContext(), topics.get(position).getTopicName(), Toast.LENGTH_SHORT).show();
 
                 //TIKLANINCA MESAJLARIN OLDUĞU FRAGMENT GELSİN
 

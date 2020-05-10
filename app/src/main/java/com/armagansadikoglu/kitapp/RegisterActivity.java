@@ -129,7 +129,8 @@ public class RegisterActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(RegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, R.string.registerFail, Toast.LENGTH_SHORT).show();
+                                Log.d("REGISTER ACT FAIL :", e.getLocalizedMessage() );
                             }
                         });
 

@@ -1,7 +1,7 @@
 package com.armagansadikoglu.kitapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,23 +9,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.fragment.app.Fragment;
-
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -174,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                                 addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                 state = addresses.get(0).getAdminArea(); // şehir bu, city olsa null dönüyor
                                 country = addresses.get(0).getCountryName(); // ülke
-                                Toast.makeText(MainActivity.this, "city : " + state+ " country : " + country, Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(MainActivity.this, "city : " + state+ " country : " + country, Toast.LENGTH_SHORT).show();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -198,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
         askPermissions();
         mAuth = FirebaseAuth.getInstance();
-        Toast.makeText(this, mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
 
 
         // Navigation View kodları
@@ -222,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference profileImagesRef = storageRef.child(mAuth.getCurrentUser().getUid());
-
         profileImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {

@@ -1,14 +1,8 @@
 package com.armagansadikoglu.kitapp;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +14,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -163,7 +155,7 @@ public class ProfileFragment extends Fragment {
                     if (editTextUserDisplayNameProfile.getText().toString().length() > 20){ // yeni kullanıcı adı uzun
                         Toast.makeText(getContext(), R.string.usernameLong, Toast.LENGTH_SHORT).show();
                     }else if (newName != true){ // aynı isim kullanılıyor
-                        Toast.makeText(getContext(), "İSİM ALINMIŞ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.usernameExists, Toast.LENGTH_SHORT).show();
                     }else{
                         //Tıklamayı önleme
                         progressBarProfile.setVisibility(View.VISIBLE);
@@ -272,7 +264,7 @@ public class ProfileFragment extends Fragment {
 
                 popup.show();
                 //Toast.makeText(getContext(), lstNotice.get(position).getBookName(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), profileNotices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getContext(), profileNotices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
                 // layoutu güncelleme
                 recyclerViewAdapter.notifyItemChanged(position);
             }

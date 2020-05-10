@@ -2,14 +2,14 @@ package com.armagansadikoglu.kitapp;
 
 
 import android.os.Bundle;
-import android.view.KeyEvent;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
@@ -106,14 +106,14 @@ public class HomeFragment extends Fragment {
                             fg.setArguments(bundle);
                             // adding fragment to relative layout by using layout id
                             getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).addToBackStack("HomeFragment").commit();
-                            Toast.makeText(getContext(), notices.get(position).getSeller(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), notices.get(position).getSeller(), Toast.LENGTH_SHORT).show();
 
                         }
                         return true;
                     }
                 });
 
-                Toast.makeText(getContext(), notices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), notices.get(position).getBookName(), Toast.LENGTH_SHORT).show();
                 popup.show();// Showing popup menu
 
 

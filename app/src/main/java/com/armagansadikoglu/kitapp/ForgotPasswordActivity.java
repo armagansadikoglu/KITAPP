@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.net.PortUnreachableException;
+
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     Button resetMyPasswordButton;
@@ -67,7 +67,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ForgotPasswordActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, R.string.fail, Toast.LENGTH_SHORT).show();
                 }
             });
         }

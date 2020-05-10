@@ -23,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -50,7 +49,7 @@ public class TopicMessagesFragment extends Fragment {
         view = inflater.inflate(R.layout.topic_messages, container, false);
         // ForumFragment'dan bundle ile gönderilen isimi ve keyi alıyoruz
 
-        Toast.makeText(getContext(), topicname, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), topicname, Toast.LENGTH_SHORT).show();
 
 
         topicMessagesRecyclerView = view.findViewById(R.id.topicMessagesRecyclerView);
@@ -100,9 +99,7 @@ public class TopicMessagesFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 //Toast.makeText(getContext(), lstNotice.get(position).getBookName(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), topicMessages.get(position).getTopicName(), Toast.LENGTH_SHORT).show();
-
-
+               // Toast.makeText(getContext(), topicMessages.get(position).getTopicName(), Toast.LENGTH_SHORT).show();
                 // layoutu güncelleme
                 //forumRecyclerViewAdapter.notifyItemChanged(position);
             }
