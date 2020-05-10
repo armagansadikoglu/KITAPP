@@ -76,7 +76,7 @@ public class ForumFragment extends Fragment {
                     // Tarihe bakılacak
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
                     String currentDateandTime = sdf.format(new Date());
-                    Topic topic = new Topic(forumAddEditText.getText().toString(), currentDateandTime, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    Topic topic = new Topic(forumAddEditText.getText().toString(), currentDateandTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(id).setValue(topic);

@@ -75,7 +75,7 @@ public class TopicMessagesFragment extends Fragment {
                     String currentDateandTime = sdf.format(new Date());
 
                     // Tarihe bakılacak
-                    Topic topic = new Topic(topicMessagesAddMessageEditText.getText().toString(), currentDateandTime, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    Topic topic = new Topic(topicMessagesAddMessageEditText.getText().toString(), currentDateandTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     topic.setKey(id);
                     mDatabase.child("forumTopics").child(topicKey).child("messages").child(id).setValue(topic);
 
