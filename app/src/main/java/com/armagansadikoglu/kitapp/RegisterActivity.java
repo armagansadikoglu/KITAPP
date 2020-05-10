@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +22,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -86,11 +89,31 @@ public class RegisterActivity extends AppCompatActivity {
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                         // kullanıcıyı database'e de kaydetme(messages kısmı için gerekti)
-                        String displayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                        String displayName ;
                         displayName = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-                        User user = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName);
-                        usersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+                        User newUser = new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), displayName);
+                        usersDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(newUser);
+
+                        // Display name set ediyoruz
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(displayName)
+                                //.setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                .build();
+
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("updateProfile","Complete");
+                                        }
+                                    }
+                                });
+
+
 
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference storageRef = storage.getReference();

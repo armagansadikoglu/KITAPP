@@ -42,6 +42,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
+        initFCM();
 
         // Bildirime tıklayıp geldiyse
         String menuFragment = getIntent().getStringExtra("menuFragment");
@@ -93,6 +96,29 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    // Bildirim için gerek Firebase Cloud Messaging tokenı oluşturan fonksiyon
+    public static void initFCM() {
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String token = instanceIdResult.getToken();
+                Log.d("login token", "token :  " + token);
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("fcm_token").setValue(token);
+                }
+            }
+        });
+
+
+    }
+
+
+
     // İZİN VERİLDİYSE YAPILACAKLAR
 
     @Override

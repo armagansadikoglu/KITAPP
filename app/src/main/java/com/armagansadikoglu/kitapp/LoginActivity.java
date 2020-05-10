@@ -48,26 +48,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    // Bildirim için gerek Firebase Cloud Messaging tokenı oluşturan fonksiyon
-    private void initFCM() {
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String token = instanceIdResult.getToken();
-                Log.d("login token", "token :  " + token);
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    FirebaseDatabase.getInstance().getReference()
-                            .child("users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("fcm_token").setValue(token);
-                }
-            }
-        });
-
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,8 +151,6 @@ public class LoginActivity extends AppCompatActivity {
                                 //Tıklamayı geri verme
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 //Toast.makeText(LoginActivity.this, user.getUid(), Toast.LENGTH_SHORT).show();
-
-                                initFCM();
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
