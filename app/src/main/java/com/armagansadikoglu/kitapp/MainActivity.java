@@ -59,24 +59,18 @@ public class MainActivity extends AppCompatActivity {
     public static String country;
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 2;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onStart() {
         super.onStart();
 
 
+
         // Bildirime tıklayıp geldiyse
         String menuFragment = getIntent().getStringExtra("menuFragment");
-        // KONUM İLE İLGİLİ İZİN KONTROLÜ
-        if (ContextCompat.checkSelfPermission(
-                getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        )!= PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, getApplicationContext().getResources().getString(R.string.pleaseAllow), Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
 
-        }else{
-            getCurrentLocation();
-        }
+
         if (menuFragment != null) {
             if (menuFragment.equals("messages")) {
 
@@ -84,6 +78,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    private void askPermissions() {
+        // KONUM İLE İLGİLİ İZİN KONTROLÜ
+        if (ContextCompat.checkSelfPermission(
+                getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        )!= PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, getApplicationContext().getResources().getString(R.string.pleaseAllow), Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_LOCATION_PERMISSION);
+        }else{
+            getCurrentLocation();
+        }
+
+
     }
     // İZİN VERİLDİYSE YAPILACAKLAR
 
@@ -109,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
+
 
     }
 
@@ -159,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        askPermissions();
         mAuth = FirebaseAuth.getInstance();
         Toast.makeText(this, mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
 

@@ -184,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     //Tıklamayı geri verme
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                    Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.loginFail, Toast.LENGTH_SHORT).show();
                 }
             });
         }
