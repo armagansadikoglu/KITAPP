@@ -129,14 +129,11 @@ public class ChatFragment extends Fragment {
         serverkeyDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               /* Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+               Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
                     server_key = child.getValue(String.class);
-                }*/
-                // Üstteki de çalışıyor zaten ama tekli için böyle de bir yöntem varmış
-                DataSnapshot next = dataSnapshot.getChildren().iterator().next();
-                String s = next.getValue().toString();
-                Log.d("Server KEY", s);
+                }
+
             }
 
             @Override
