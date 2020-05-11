@@ -45,7 +45,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -66,8 +66,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerViewAdapter recyclerViewAdapter;
     ArrayList<Notice> profileNotices = new ArrayList<>();
 
-    boolean available = true;
-
+    private boolean available ;
+    List<String> names = new ArrayList<String>();
 
 
     @Override
@@ -168,10 +168,10 @@ public class ProfileFragment extends Fragment {
                 if (editTextUserDisplayNameProfile.getText().toString().trim() .length() == 0) {  // boş bırakmış mı kontrolü
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show(); // registerda da kullandığım boş bırakmayın uyarısını ver
                 }else{
-
+                    userNameAvailable(editTextUserDisplayNameProfile.getText().toString());
                     if (editTextUserDisplayNameProfile.getText().toString().length() > 20){ // yeni kullanıcı adı uzun
                         Toast.makeText(getContext(), R.string.usernameLong, Toast.LENGTH_SHORT).show();
-                    }else if (userNameAvailable(editTextUserDisplayNameProfile.getText().toString())){ // aynı isim kullanılıyor
+                    }else if (available == false){ // aynı isim kullanılıyor
                         Toast.makeText(getContext(), R.string.usernameExists, Toast.LENGTH_SHORT).show();
                     }else{
                         //Tıklamayı önleme
@@ -293,27 +293,33 @@ public class ProfileFragment extends Fragment {
 
 
 
-    private boolean userNameAvailable(String name) {
+    private void userNameAvailable(final String name) {
 
-        final String newUserNme =  name;
+        if (names.contains(name)){
+            available = false;
+        }else {
+            available = true;
+        }
+
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // İSİMLERİ BURADA İNDİRMEZSEK ASYNC ÇALIŞTIĞI İÇİN DÜZGÜN ÇALIŞMÖAZ
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference users = reference.child("users");
-        users.addListenerForSingleValueEvent(new ValueEventListener() {
+        users.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children){
-                    User value = child.getValue(User.class);
-                    try {
-                        String userDisplayName = value.getUserDisplayName();
-                        if (userDisplayName.equals(newUserNme)){
-                            available = false;
-                        }
-                    }catch (Exception e){
-                        continue;
-                    }
-
+                    String userDisplayName = child.child("userDisplayName").getValue(String.class);
+                    names.add(userDisplayName);
                 }
+
             }
 
             @Override
@@ -321,13 +327,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        return  available;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference().child("notices");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
