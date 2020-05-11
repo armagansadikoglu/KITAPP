@@ -13,6 +13,7 @@ android {
         applicationId "com.armagansadikoglu.kitapp"
         minSdkVersion 19
         targetSdkVersion 29
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -36,9 +37,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.5'
 
 
+
     implementation "com.google.android.gms:play-services-location:17.0.0"
     implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
-    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.3'
+
     implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

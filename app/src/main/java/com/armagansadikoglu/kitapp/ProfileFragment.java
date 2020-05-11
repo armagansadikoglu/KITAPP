@@ -1,8 +1,12 @@
 package com.armagansadikoglu.kitapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,12 +40,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.iceteck.silicompressorr.FileUtils;
-import com.iceteck.silicompressorr.SiliCompressor;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,7 +55,7 @@ public class ProfileFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
     ImageView imageViewProfile;
     Uri imageURI;
-    Uri uri;
+
 
     ProgressBar progressBarProfile;
 
@@ -72,10 +77,7 @@ public class ProfileFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             imageURI = data.getData();
-
-            File file = new File(SiliCompressor.with(getContext()).compress(FileUtils.getPath(getContext(),imageURI),new File(getContext().getCacheDir(),"temp")));
-            uri = Uri.fromFile(file);
-            Picasso.get().load(uri).into(imageViewProfile);
+           Picasso.get().load(imageURI).into(imageViewProfile);
 
             //Tıklamayı önleme
             progressBarProfile.setVisibility(View.VISIBLE);
@@ -83,10 +85,13 @@ public class ProfileFragment extends Fragment {
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
+
+
+
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
             StorageReference profileImagesRef = storageRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            UploadTask uploadTask = profileImagesRef.putFile(uri);
+            UploadTask uploadTask = profileImagesRef.putFile(imageURI);
             uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -102,7 +107,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
-            file.delete();
+
         }
 
 

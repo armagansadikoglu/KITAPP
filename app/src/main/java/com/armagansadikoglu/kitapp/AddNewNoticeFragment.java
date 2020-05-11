@@ -1,9 +1,13 @@
 package com.armagansadikoglu.kitapp;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +35,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.iceteck.silicompressorr.FileUtils;
-import com.iceteck.silicompressorr.SiliCompressor;
+
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import static android.app.Activity.RESULT_OK;
@@ -49,9 +53,7 @@ public class AddNewNoticeFragment extends Fragment {
     // Fotolar için de bu id kullanılacak
     private String id;
     private Boolean imageChosen = false;
-    File file;
 
-    Uri uri;
 
     Spinner spinner;
 
@@ -134,7 +136,7 @@ public class AddNewNoticeFragment extends Fragment {
                         StorageReference storageRef = storage.getReference();
                         StorageReference bookImageRef = storageRef.child(id);
                         //StorageReference profileImagesRef = storageRef.child(id).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        UploadTask uploadTask = bookImageRef.putFile(uri);
+                        UploadTask uploadTask = bookImageRef.putFile(bookImageURI);
                         uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -145,7 +147,7 @@ public class AddNewNoticeFragment extends Fragment {
                                 // İlan eklendikten sonra ana sayfaya atma
                                 Fragment fg = new HomeFragment();
                                 getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
-                                file.delete();
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -172,16 +174,9 @@ public class AddNewNoticeFragment extends Fragment {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
-
-
             bookImageURI = data.getData();
-
-           file = new File(SiliCompressor.with(getContext()).compress(FileUtils.getPath(getContext(),bookImageURI),new File(getContext().getCacheDir(),"temp")));
-            uri = Uri.fromFile(file);
-            Picasso.get().load(uri).into(imageViewNoticeAdd);
+            Picasso.get().load(bookImageURI).into(imageViewNoticeAdd);
             imageChosen = true;
-
-
 
         }
 
