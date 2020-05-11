@@ -103,6 +103,8 @@ public class ProfileFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    //Tıklamayı geri verme
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     Toast.makeText(getContext(), R.string.fail, Toast.LENGTH_SHORT).show();
                 }
             });

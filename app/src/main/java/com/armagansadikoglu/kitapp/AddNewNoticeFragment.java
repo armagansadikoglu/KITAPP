@@ -11,10 +11,12 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -50,6 +52,7 @@ public class AddNewNoticeFragment extends Fragment {
     private ImageView imageViewNoticeAdd;
     private Uri bookImageURI;
     private DatabaseReference mDatabase;
+    ProgressBar addNewNoticeProgressBar;
     // Fotolar için de bu id kullanılacak
     private String id;
     private Boolean imageChosen = false;
@@ -70,6 +73,7 @@ public class AddNewNoticeFragment extends Fragment {
         editTextBookPrice = v.findViewById(R.id.editTextNoticeBookPrice);
         editTextBookDetails = v.findViewById(R.id.editTextNoticeBookDetails);
         imageViewNoticeAdd = v.findViewById(R.id.imageViewNoticeAdd);
+        addNewNoticeProgressBar = v.findViewById(R.id.addNewNoticeProgressBar);
         // Türler için
         spinner = v.findViewById(R.id.spinnerNewNotice);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.bookGenres));
@@ -98,6 +102,8 @@ public class AddNewNoticeFragment extends Fragment {
         buttonAddNewNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 // Alanlar boş mu kontrol ediliyor . imageViewNoticeAdd.getDrawable() == null foto için
                 if (editTextBookName.getText().toString().trim().length() == 0 ||
                         editTextBookPrice.getText().toString().trim().length() == 0 ||
@@ -108,6 +114,12 @@ public class AddNewNoticeFragment extends Fragment {
                     if (editTextBookDetails.getText().length() > 200 || editTextBookName.getText().length() > 200 || editTextBookPrice.getText().length()>9){
                         Toast.makeText(getContext(), R.string.tooLong, Toast.LENGTH_SHORT).show();
                     }else{
+
+                        //Tıklamayı önleme
+                        addNewNoticeProgressBar.setVisibility(View.VISIBLE);
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                         mDatabase = FirebaseDatabase.getInstance().getReference();
                         // Üst üste yazmasın diye key oluşturma
                         id = mDatabase.push().getKey();
@@ -140,25 +152,30 @@ public class AddNewNoticeFragment extends Fragment {
                         uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                //  progressBarProfile.setVisibility(View.INVISIBLE);
+                                 addNewNoticeProgressBar.setVisibility(View.INVISIBLE);
                                 //Tıklamayı geri verme
-                                //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
                                 // İlan eklendikten sonra ana sayfaya atma
                                 Fragment fg = new HomeFragment();
                                 getFragmentManager().beginTransaction().add(R.id.fragment_container, fg).commit();
+                                Toast.makeText(getContext(), R.string.noticeUploaded, Toast.LENGTH_SHORT).show();
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                addNewNoticeProgressBar.setVisibility(View.INVISIBLE);
+                                //Tıklamayı geri verme
+                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 Toast.makeText(getContext(), R.string.fail, Toast.LENGTH_SHORT).show();
                             }
                         });
 
 
-                        Toast.makeText(getContext(), R.string.noticeUploaded, Toast.LENGTH_SHORT).show();
+
                     }
+
 
                 }
             }
