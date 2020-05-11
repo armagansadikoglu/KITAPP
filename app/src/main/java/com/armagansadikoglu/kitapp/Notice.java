@@ -10,8 +10,9 @@ public class Notice {
     private String Genre;
     private String City;
     private String Country;
+    private String NoticeDate;
 
-    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID,String genre,String city,String country) {
+    public Notice(String bookName, Long price, String seller, String userID, String bookDetails, String noticeID,String genre,String city,String country, String date) {
         BookName = bookName;
         Seller = seller;
         Price = price;
@@ -21,10 +22,19 @@ public class Notice {
         Genre = genre;
         City = city;
         Country = country;
+        NoticeDate = date;
     }
 
 
     public Notice() {
+    }
+
+    public String getNoticeDate() {
+        return NoticeDate;
+    }
+
+    public void setNoticeDate(String noticeDate) {
+        NoticeDate = noticeDate;
     }
 
     public String getCity() {

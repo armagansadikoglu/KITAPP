@@ -42,6 +42,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -57,7 +60,7 @@ public class AddNewNoticeFragment extends Fragment {
     private String id;
     private Boolean imageChosen = false;
 
-
+    String currentDateandTime;
     Spinner spinner;
 
     String displayName;
@@ -125,6 +128,9 @@ public class AddNewNoticeFragment extends Fragment {
                         id = mDatabase.push().getKey();
 
 
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault());
+                        currentDateandTime = sdf.format(new Date());
+
                         DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
                         DatabaseReference user = users.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userDisplayName");
                         user.addValueEventListener(new ValueEventListener() {
@@ -133,7 +139,7 @@ public class AddNewNoticeFragment extends Fragment {
                                 displayName = dataSnapshot.getValue(String.class);
                                 Notice notice = new Notice(editTextBookName.getText().toString(), Long.parseLong(editTextBookPrice.getText().toString()),
                                         displayName, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                        editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country);
+                                        editTextBookDetails.getText().toString(), id,spinner.getSelectedItem().toString(),MainActivity.state,MainActivity.country,currentDateandTime);
                                 mDatabase.child("notices").child(id).setValue(notice);
                             }
 

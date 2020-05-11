@@ -108,6 +108,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        holder.rowTvNoticeDate.setText(mData.get(position).getNoticeDate());
+
 
         // İlan fotosunu çekme
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -162,6 +164,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         private TextView rowTvShoppings;
         private ImageView rowSellerPP;
+        private TextView rowTvNoticeDate;
 
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -175,6 +178,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             rowTvShoppings = itemView.findViewById(R.id.rowTvShoppings);
             rowSellerPP = itemView.findViewById(R.id.rowSellerPP);
             rowTvLocation = itemView.findViewById(R.id.rowTvLocation);
+            rowTvNoticeDate = itemView.findViewById(R.id.rowTvNoticeDate);
             // onclick interface
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
