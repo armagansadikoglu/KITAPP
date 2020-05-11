@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
     private RadioButton cityFilterRadioButton,countryFilterRadioButton;
     private Spinner genreFilterSpinner;
     ArrayList<Notice> notices = new ArrayList<>();
-
+    String genre;
 
     @Nullable
     @Override
@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference().child("notices");
         //Toast.makeText(getContext(), MainActivity.country, Toast.LENGTH_SHORT).show();
-        final String genre = genreFilterSpinner.getSelectedItem().toString();
+         genre = genreFilterSpinner.getSelectedItem().toString();
         if (genre.equals("Choose Genre") || genre.equals("Tür Seçin")){ // TÜR SEÇİLMEMİŞ
             if (countryFilterRadioButton.isChecked()){
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -188,6 +188,7 @@ public class HomeFragment extends Fragment {
                             }
 
                         }
+                        Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
                     }
@@ -213,6 +214,7 @@ public class HomeFragment extends Fragment {
                             }
 
                         }
+                        Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
                     }
@@ -229,10 +231,16 @@ public class HomeFragment extends Fragment {
                         notices.clear();
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
-                            Notice value = child.getValue(Notice.class);
-                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()))
-                                notices.add(value);
+                            try {
+                                Notice value = child.getValue(Notice.class);
+                                if (value.getBookName().toLowerCase().contains(word.toLowerCase()))
+                                    notices.add(value);
+                            }catch (Exception e){
+                                continue;
+                            }
+
                         }
+                        Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
                     }
@@ -251,10 +259,16 @@ public class HomeFragment extends Fragment {
                         notices.clear();
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
-                            Notice value = child.getValue(Notice.class);
-                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCountry().equals(MainActivity.country) && value.getGenre().equals(genre))
-                                notices.add(value);
+                            try {
+                                Notice value = child.getValue(Notice.class);
+                                if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCountry().equals(MainActivity.country) && value.getGenre().equals(genre))
+                                    notices.add(value);
+                            }catch (Exception e){
+                                continue;
+                            }
+
                         }
+                        Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
                     }
@@ -272,9 +286,15 @@ public class HomeFragment extends Fragment {
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
                             Notice value = child.getValue(Notice.class);
-                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCity().equals(MainActivity.state)&& value.getGenre().equals(genre))
-                                notices.add(value);
+                            try {
+                                if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCity().equals(MainActivity.state)&& value.getGenre().equals(genre))
+                                    notices.add(value);
+                            }catch (Exception e){
+                                continue;
+                            }
+
                         }
+                        Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
                     }
@@ -292,9 +312,15 @@ public class HomeFragment extends Fragment {
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
                             Notice value = child.getValue(Notice.class);
-                            if (value.getBookName().toLowerCase().contains(word.toLowerCase())&& value.getGenre().equals(genre))
-                                notices.add(value);
+                            try {
+                                if (value.getBookName().toLowerCase().contains(word.toLowerCase())&& value.getGenre().equals(genre))
+                                    notices.add(value);
+                            }catch (Exception e){
+                                continue;
+                            }
+
                         }
+                        Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
                     }
