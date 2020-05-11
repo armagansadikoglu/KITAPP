@@ -83,6 +83,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.rowTvBookDetails.setText(word);
         word = mContext.getResources().getString(R.string.genre) + " : " + mData.get(position).getGenre();
         holder.rowTvGenre.setText(word);
+        word = mContext.getResources().getString(R.string.location) + " : " + mData.get(position).getCity() + "/" + mData.get(position).getCountry();
+        holder.rowTvLocation.setText(word);
         // Yapılan alışveriş sayısını bulma
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -156,6 +158,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private ImageView rowPP;
         private TextView rowTvBookDetails;
         private TextView rowTvGenre;
+        private TextView rowTvLocation;
 
         private TextView rowTvShoppings;
         private ImageView rowSellerPP;
@@ -171,6 +174,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             rowTvBookDetails = itemView.findViewById(R.id.rowTvBookDetails);
             rowTvShoppings = itemView.findViewById(R.id.rowTvShoppings);
             rowSellerPP = itemView.findViewById(R.id.rowSellerPP);
+            rowTvLocation = itemView.findViewById(R.id.rowTvLocation);
             // onclick interface
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

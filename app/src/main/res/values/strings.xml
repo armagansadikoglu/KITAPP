@@ -84,5 +84,6 @@
     <string name="shoopingsMade">Shopping(s) Made</string>
     <string name="allowImage">If you don\'t allow permission you can\'t pick image. If there is no image you can\'t add notice or change profile photo</string>
     <string name="imagewillbecorrect">When you pick an image, it might look reversed. Don\'t worry. It will be uploaded as normal. </string>
+    <string name="location">Location </string>
 
 </resources>

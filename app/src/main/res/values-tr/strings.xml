@@ -84,4 +84,5 @@
     <string name="shoopingsMade">Alışveriş Yapıldı</string>
     <string name="allowImage">Gereken izini vermezseniz fotoğraf seçemezsiniz. Fotoğraf seçmeden ilan eklemeyemez veya profil fotoğrafını değiştiremezsiniz</string>
     <string name="imagewillbecorrect">Bir resim seçtiğinizde, resim ters çevirilmiş gibi durabilir. Endişe etmeyin. Resim orijinal halindeki gibi yüklenecek</string>
+    <string name="location">Konum</string>
 </resources>
