@@ -164,14 +164,14 @@ public class ProfileFragment extends Fragment {
         buttonUpdateUserNameProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 boolean newName = userNameAvailable();
+
                 if (editTextUserDisplayNameProfile.getText().toString().trim() .length() == 0) {  // boş bırakmış mı kontrolü
                     Toast.makeText(getContext(), R.string.registerError, Toast.LENGTH_SHORT).show(); // registerda da kullandığım boş bırakmayın uyarısını ver
                 }else{
 
                     if (editTextUserDisplayNameProfile.getText().toString().length() > 20){ // yeni kullanıcı adı uzun
                         Toast.makeText(getContext(), R.string.usernameLong, Toast.LENGTH_SHORT).show();
-                    }else if (newName != true){ // aynı isim kullanılıyor
+                    }else if (userNameAvailable(editTextUserDisplayNameProfile.getText().toString())){ // aynı isim kullanılıyor
                         Toast.makeText(getContext(), R.string.usernameExists, Toast.LENGTH_SHORT).show();
                     }else{
                         //Tıklamayı önleme
@@ -293,9 +293,9 @@ public class ProfileFragment extends Fragment {
 
 
 
-    private boolean userNameAvailable() {
+    private boolean userNameAvailable(String name) {
 
-        final String newUserNme =  editTextUserDisplayNameProfile.getText().toString();
+        final String newUserNme =  name;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference users = reference.child("users");
         users.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -312,7 +312,6 @@ public class ProfileFragment extends Fragment {
                     }catch (Exception e){
                         continue;
                     }
-
 
                 }
             }
