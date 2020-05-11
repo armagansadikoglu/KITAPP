@@ -26,6 +26,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -96,6 +97,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
                 word = shoppingsCount + " " + mContext.getResources().getString(R.string.shoopingsMade);
                 holder.rowTvShoppings.setText(word);
+
             }
 
             @Override

@@ -126,14 +126,6 @@ public class MainActivity extends AppCompatActivity {
             finish(); System.exit(0);
 
 
-            /*
-                Alternatif olarak
-                int pid = android.os.Process.myPid();
-                android.os.Process.killProcess(pid);
-
-             */
-
-
         }
 
 

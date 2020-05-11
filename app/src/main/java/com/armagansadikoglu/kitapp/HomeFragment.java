@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class HomeFragment extends Fragment {
@@ -147,8 +148,10 @@ public class HomeFragment extends Fragment {
                     Notice value = child.getValue(Notice.class);
                     notices.add(value);
                 }
+                Collections.reverse(notices); // En son yüklenen ilanlar en yukarıda çıksın
                 // Verileri sürekli getirmesi için
                 recyclerViewAdapter.notifyDataSetChanged();
+
             }
 
             @Override
