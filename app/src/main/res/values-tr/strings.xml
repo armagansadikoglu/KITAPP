@@ -83,4 +83,5 @@
     <string name="usernameExists">Kullanıcı adı alınmış. Başka bir kullanıcı adı giriniz</string>
     <string name="shoopingsMade">Alışveriş Yapıldı</string>
     <string name="allowImage">Gereken izini vermezseniz fotoğraf seçemezsiniz. Fotoğraf seçmeden ilan eklemeyemez veya profil fotoğrafını değiştiremezsiniz</string>
+    <string name="imagewillbecorrect">Bir resim seçtiğinizde, resim ters çevirilmiş gibi durabilir. Endişe etmeyin. Resim orijinal halindeki gibi yüklenecek</string>
 </resources>

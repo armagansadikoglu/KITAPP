@@ -180,8 +180,13 @@ public class HomeFragment extends Fragment {
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
                             Notice value = child.getValue(Notice.class);
-                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCountry().equals(MainActivity.country))
-                                notices.add(value);
+                            try {
+                                if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCountry().equals(MainActivity.country))
+                                    notices.add(value);
+                            }catch (Exception e){
+                                continue;
+                            }
+
                         }
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();
@@ -200,8 +205,13 @@ public class HomeFragment extends Fragment {
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
                             Notice value = child.getValue(Notice.class);
-                            if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && value.getCity().equals(MainActivity.state))
-                                notices.add(value);
+                            try {
+                                if (value.getBookName().toLowerCase().contains(word.toLowerCase()) && !value.getBookName().equals(null) && value.getCity().equals(MainActivity.state))
+                                    notices.add(value);
+                            }catch (Exception e){
+                                continue;
+                            }
+
                         }
                         // Verileri sürekli getirmesi için
                         recyclerViewAdapter.notifyDataSetChanged();

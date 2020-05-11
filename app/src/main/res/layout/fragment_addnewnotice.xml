@@ -90,4 +90,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/addnewNoticeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/imagewillbecorrect"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextNoticeBookName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewNoticeAdd" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
