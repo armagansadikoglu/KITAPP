@@ -297,9 +297,16 @@ public class ProfileFragment extends Fragment {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children){
                     User value = child.getValue(User.class);
-                    if (value.getUserDisplayName().equals(newUserNme)){
-                        available = false;
+                    try {
+                        String userDisplayName = value.getUserDisplayName();
+                        if (userDisplayName.equals(newUserNme)){
+                            available = false;
+                        }
+                    }catch (Exception e){
+                        continue;
                     }
+
+
                 }
             }
 
