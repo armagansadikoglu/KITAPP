@@ -26,11 +26,13 @@
         app:layout_constraintEnd_toStartOf="@+id/chatSendButton"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/chatSendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_send_black_24dp"
+        android:layout_width="55dp"
+        android:layout_height="0dp"
+        android:background="@drawable/customborder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chatEditText"
+        app:srcCompat="@drawable/ic_send_black_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

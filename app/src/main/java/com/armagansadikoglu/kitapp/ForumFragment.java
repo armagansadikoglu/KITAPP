@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,7 +37,8 @@ public class ForumFragment extends Fragment {
     private RecyclerView forumRecyclerView;
     private ForumRecyclerViewAdapter forumRecyclerViewAdapter;
     private ArrayList<Topic> topics = new ArrayList<>();
-    private Button forumSearchButton, forumAddButton;
+
+    private ImageButton forumSearchButton,forumAddButton;
     private EditText forumSearchEditText, forumAddEditText;
     private DatabaseReference mDatabase;
     private DatabaseReference topicsDatabaseReference;

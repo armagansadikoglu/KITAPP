@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -42,7 +43,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView myrcyclerview;
     private RecyclerViewAdapter recyclerViewAdapter;
     private EditText homeBookSearchEditText;
-    private Button homeBookSearchButton;
+    private ImageButton homeBookSearchButton;
     private RadioButton cityFilterRadioButton,countryFilterRadioButton;
     private Spinner genreFilterSpinner;
     ArrayList<Notice> notices = new ArrayList<>();

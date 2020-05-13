@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +34,7 @@ public class ChatFragment extends Fragment {
     RecyclerView chatRecyclerView;
     ChatAdapter chatAdapter;
     EditText chatEditText;
-    Button chatSendButton;
+    ImageButton chatSendButton;
     String receiverName, receiverID;
     View view;
 
